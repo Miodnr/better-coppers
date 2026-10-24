@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "bettercoppers",
+	"version": "${version}",
+	"name": "Better Coppers",
+	"description": "Smarter Copper Golems: they know where items belong and can tow a copper chest minecart on an iron chain.",
+	"authors": [],
+	"license": "All-Rights-Reserved",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"dev.bettercoppers.BetterCoppers"
+		],
+		"client": [
+			"dev.bettercoppers.client.BetterCoppersClient"
+		]
+	},
+	"mixins": [
+		"bettercoppers.mixins.json",
+		{
+			"config": "bettercoppers.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}

@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": { "P": "minecraft:paper", "C": "minecraft:copper_ingot", "#": "#minecraft:planks" },
+  "pattern": ["PP", "CC", "##"],
+  "result": { "id": "bettercoppers:survey_table" }
+}
