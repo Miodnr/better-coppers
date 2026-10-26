@@ -1,5 +1,6 @@
 package dev.mioscoppergolems.upkeep;
 
+import dev.mioscoppergolems.guide.Guide;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.dispenser.BlockSource;
@@ -33,6 +34,7 @@ public class AxeDispenseBehavior extends OptionalDispenseItemBehavior {
 			if (Upkeep.scrape(level, golem)) {
 				stack.hurtAndBreak(1, level, null, item -> {});
 				this.setSuccess(true);
+				Guide.awardNearby(level, golem.position(), "scrape");
 				break;
 			}
 		}

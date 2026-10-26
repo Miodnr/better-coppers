@@ -2,6 +2,7 @@ package dev.mioscoppergolems.farming;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.mioscoppergolems.job.Tools;
 import dev.mioscoppergolems.registry.ModAttachments;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.animal.golem.CopperGolem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.NetherWartBlock;
 import org.jspecify.annotations.Nullable;
@@ -51,13 +53,13 @@ public final class FarmerData {
 	}
 
 	public static boolean hasHoe(CopperGolem golem) {
-		return golem.getMainHandItem().is(ItemTags.HOES);
+		return golem.getMainHandItem().is(Items.COPPER_HOE);
 	}
 
 	/** A golem that was handed a hoe, or still has harvest to bring home. Farmers do not sort. */
 	public static boolean isFarmer(CopperGolem golem) {
 		FarmerData data = get(golem);
-		return data != null && (hasHoe(golem) || data.harvestCount() > 0);
+		return data != null && (hasHoe(golem) || Tools.hasLost(golem, Items.COPPER_HOE) || data.harvestCount() > 0);
 	}
 
 	/** Anything a farmer can plant: crops for farmland and nether wart for soul sand. */

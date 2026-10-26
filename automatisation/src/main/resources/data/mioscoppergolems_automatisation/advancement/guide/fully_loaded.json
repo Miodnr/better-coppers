@@ -1,0 +1,25 @@
+{
+  "parent": "mioscoppergolems_automatisation:guide/upgrade",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "mioscoppergolems_automatisation:gold_gearwork"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.fully_loaded.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.fully_loaded.description"
+    },
+    "frame": "challenge"
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

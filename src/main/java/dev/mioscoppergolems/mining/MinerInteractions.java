@@ -1,5 +1,7 @@
 package dev.mioscoppergolems.mining;
 
+import dev.mioscoppergolems.guide.Guide;
+import dev.mioscoppergolems.job.Tools;
 import dev.mioscoppergolems.registry.ModAttachments;
 import dev.mioscoppergolems.registry.ModComponents;
 import dev.mioscoppergolems.registry.ModItems;
@@ -17,6 +19,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.animal.golem.CopperGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import org.jspecify.annotations.Nullable;
@@ -42,7 +45,7 @@ public final class MinerInteractions {
 		if (held.is(ModItems.MINESHAFT_PLAN)) {
 			return givePlan(player, level, golem, held);
 		}
-		if (held.is(ItemTags.PICKAXES)) {
+		if (held.is(Items.COPPER_PICKAXE)) {
 			return givePickaxe(player, level, golem, held);
 		}
 		if (held.isEmpty() && !player.isShiftKeyDown() && MinerData.hasPickaxe(golem)) {
@@ -76,6 +79,8 @@ public final class MinerInteractions {
 			golem.playSound(SoundEvents.BOOK_PAGE_TURN);
 			if (!MinerData.hasPickaxe(golem)) {
 				player.sendOverlayMessage(Component.translatable("message.mioscoppergolems.needs_pickaxe"));
+			} else {
+				Guide.job(player, "miner");
 			}
 		}
 		return InteractionResult.SUCCESS;
@@ -90,10 +95,13 @@ public final class MinerInteractions {
 			golem.setItemSlot(EquipmentSlot.MAINHAND, held.copyWithCount(1));
 			golem.setGuaranteedDrop(EquipmentSlot.MAINHAND);
 			held.consume(1, player);
+			Tools.clearLost(golem);
 			MinerData data = MinerData.getOrCreate(golem);
 			golem.playSound(SoundEvents.COPPER_GOLEM_ITEM_GET);
 			if (data.plan() == null) {
 				player.sendOverlayMessage(Component.translatable("message.mioscoppergolems.needs_plan"));
+			} else {
+				Guide.job(player, "miner");
 			}
 		}
 		return InteractionResult.SUCCESS;

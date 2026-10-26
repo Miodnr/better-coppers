@@ -2,6 +2,7 @@ package dev.mioscoppergolems.registry;
 
 import dev.mioscoppergolems.MiosCoppergolems;
 import dev.mioscoppergolems.entity.CopperChestMinecart;
+import dev.mioscoppergolems.entity.GolemBobber;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -15,6 +16,10 @@ public final class ModEntities {
 	public static final EntityType<CopperChestMinecart> COPPER_CHEST_MINECART = register(
 		"copper_chest_minecart",
 		EntityType.Builder.of(CopperChestMinecart::new, MobCategory.MISC).noLootTable().sized(0.98F, 0.7F).passengerAttachments(0.1875F).clientTrackingRange(8)
+	);
+
+	public static final EntityType<GolemBobber> GOLEM_BOBBER = register(
+		"golem_bobber", EntityType.Builder.<GolemBobber>of(GolemBobber::new, MobCategory.MISC).noLootTable().noSave().noSummon().sized(0.25F, 0.25F).clientTrackingRange(4)
 	);
 
 	private ModEntities() {

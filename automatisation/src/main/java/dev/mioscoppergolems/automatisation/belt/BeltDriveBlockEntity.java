@@ -2,6 +2,7 @@ package dev.mioscoppergolems.automatisation.belt;
 
 import dev.mioscoppergolems.automatisation.machine.MachineBlockEntity;
 import dev.mioscoppergolems.automatisation.registry.AutoBlockEntities;
+import dev.mioscoppergolems.automatisation.registry.AutoItems;
 import java.util.ArrayDeque;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +11,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -22,6 +24,22 @@ public class BeltDriveBlockEntity extends MachineBlockEntity {
 
 	public BeltDriveBlockEntity(BlockPos pos, BlockState state) {
 		super(AutoBlockEntities.BELT_DRIVE, pos, state);
+	}
+
+	/** Twenty minutes of running per copper sheet. */
+	@Override
+	protected int maxWear() {
+		return 1200;
+	}
+
+	@Override
+	protected String guideStep() {
+		return "belt";
+	}
+
+	@Override
+	public Item repairItem() {
+		return AutoItems.COPPER_SHEET;
 	}
 
 	@Override
@@ -46,6 +64,7 @@ public class BeltDriveBlockEntity extends MachineBlockEntity {
 			}
 		}
 		if (now % 20 == 0) {
+			this.addWear(level, 1);
 			level.playSound(null, this.worldPosition, SoundEvents.CHAIN_STEP, SoundSource.BLOCKS, 0.4F, 0.7F + level.getRandom().nextFloat() * 0.1F);
 		}
 	}

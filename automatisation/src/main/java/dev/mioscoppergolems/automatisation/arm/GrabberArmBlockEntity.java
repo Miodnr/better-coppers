@@ -89,6 +89,11 @@ public class GrabberArmBlockEntity extends MachineBlockEntity {
 	}
 
 	@Override
+	protected int maxWear() {
+		return 256;
+	}
+
+	@Override
 	public boolean wantsWork(ServerLevel level) {
 		if (this.target != null || !this.held.isEmpty()) {
 			return true;
@@ -115,6 +120,7 @@ public class GrabberArmBlockEntity extends MachineBlockEntity {
 		} else {
 			this.drop(level, this.target);
 		}
+		this.addWear(level, 1);
 		this.previous = this.target;
 		this.target = null;
 		this.progress = 0;

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "L": "minecraft:leather",
+    "S": "mioscoppergolems_automatisation:copper_sheet"
+  },
+  "pattern": [
+    "LSL",
+    "L L",
+    "LLL"
+  ],
+  "result": {
+    "id": "mioscoppergolems_automatisation:copper_satchel",
+    "count": 1
+  }
+}

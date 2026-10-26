@@ -1,6 +1,7 @@
 package dev.mioscoppergolems.golem;
 
 import dev.mioscoppergolems.entity.CopperChestMinecart;
+import dev.mioscoppergolems.guide.Guide;
 import java.util.List;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -12,7 +13,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Handing a cart over to a golem: chain the cart to yourself with an iron chain, then right-click a copper golem.
+ * Handing a cart over to a golem: chain the cart to yourself with an iron or copper chain, then right-click a copper golem.
  */
 public final class CartChaining {
 	private static final double SEARCH_RADIUS = 16.0;
@@ -30,6 +31,7 @@ public final class CartChaining {
 		}
 		if (!level.isClientSide()) {
 			carts.getFirst().chainTo(golem);
+			Guide.award(player, "cart");
 		}
 		return InteractionResult.SUCCESS;
 	}

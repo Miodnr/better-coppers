@@ -11,6 +11,9 @@ import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.trim.ArmorTrim;
 
@@ -62,6 +65,21 @@ public final class ModAttachments {
 	/** Set while a golem is off on an errand (repairing an iron golem) that pauses its job. Not saved. */
 	public static final AttachmentType<Boolean> ERRAND = AttachmentRegistry.create(MiosCoppergolems.id("errand"), builder -> {
 	});
+
+	/** The copper tool that broke in the golem's hand; it keeps its job and looks for a new one. */
+	public static final AttachmentType<Item> LOST_TOOL = AttachmentRegistry.create(
+		MiosCoppergolems.id("lost_tool"), builder -> builder.persistent(BuiltInRegistries.ITEM.byNameCodec())
+	);
+
+	/** The eye upgrade (1 iron, 2 gold, 3 diamond) that widens the golem's work radius. Synced for the eye colour. */
+	public static final AttachmentType<Integer> EYES = AttachmentRegistry.create(
+		MiosCoppergolems.id("eyes"), builder -> builder.persistent(Codec.INT).syncWith(ByteBufCodecs.VAR_INT, AttachmentSyncPredicate.all())
+	);
+
+	/** A miner that found diamonds: it hurries home with its antenna blinking. Synced for the antenna. */
+	public static final AttachmentType<Boolean> EXCITED = AttachmentRegistry.create(
+		MiosCoppergolems.id("excited"), builder -> builder.persistent(Codec.BOOL).syncWith(ByteBufCodecs.BOOL, AttachmentSyncPredicate.all())
+	);
 
 	private ModAttachments() {
 	}

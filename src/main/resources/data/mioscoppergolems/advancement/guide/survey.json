@@ -1,0 +1,32 @@
+{
+  "parent": "mioscoppergolems:guide/home",
+  "criteria": {
+    "mineshaft_plan": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "mioscoppergolems:mineshaft_plan"
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "mioscoppergolems:survey_table"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems.guide.survey.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems.guide.survey.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "mineshaft_plan"
+    ]
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "parent": "mioscoppergolems:guide/build_golem",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:poppy"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems.guide.guard.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems.guide.guard.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

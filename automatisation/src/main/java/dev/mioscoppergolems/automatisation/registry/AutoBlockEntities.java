@@ -2,6 +2,7 @@ package dev.mioscoppergolems.automatisation.registry;
 
 import dev.mioscoppergolems.automatisation.Automatisation;
 import dev.mioscoppergolems.automatisation.arm.GrabberArmBlockEntity;
+import dev.mioscoppergolems.automatisation.assembler.GolemAssemblerBlockEntity;
 import dev.mioscoppergolems.automatisation.belt.BeltDriveBlockEntity;
 import dev.mioscoppergolems.automatisation.belt.ConveyorBeltBlockEntity;
 import dev.mioscoppergolems.automatisation.chute.ChuteBlockEntity;
@@ -23,6 +24,9 @@ public final class AutoBlockEntities {
 	public static final BlockEntityType<PressBlockEntity> PRESS = register("press", PressBlockEntity::new, AutoBlocks.PRESS);
 	public static final BlockEntityType<SawBlockEntity> SAW = register("saw", SawBlockEntity::new, AutoBlocks.SAW);
 	public static final BlockEntityType<GrabberArmBlockEntity> GRABBER_ARM = register("grabber_arm", GrabberArmBlockEntity::new, AutoBlocks.GRABBER_ARM);
+	public static final BlockEntityType<GolemAssemblerBlockEntity> GOLEM_ASSEMBLER = register(
+		"golem_assembler", GolemAssemblerBlockEntity::new, AutoBlocks.GOLEM_ASSEMBLER
+	);
 
 	private AutoBlockEntities() {
 	}

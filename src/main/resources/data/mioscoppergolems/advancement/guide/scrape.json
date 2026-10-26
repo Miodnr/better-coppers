@@ -1,0 +1,25 @@
+{
+  "parent": "mioscoppergolems:guide/recharge",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:dispenser"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems.guide.scrape.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems.guide.scrape.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

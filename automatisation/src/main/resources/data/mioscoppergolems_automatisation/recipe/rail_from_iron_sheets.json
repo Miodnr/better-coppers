@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "S": "mioscoppergolems_automatisation:iron_sheet",
+    "K": "minecraft:stick"
+  },
+  "pattern": [
+    "S S",
+    "SKS"
+  ],
+  "result": {
+    "id": "minecraft:rail",
+    "count": 16
+  }
+}

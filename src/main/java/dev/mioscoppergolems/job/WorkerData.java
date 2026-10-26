@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.animal.golem.CopperGolem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jspecify.annotations.Nullable;
 
@@ -49,13 +50,17 @@ public final class WorkerData {
 
 	/** The job of the tool in the golem's hand, if a player made it a worker. */
 	public static @Nullable Job job(CopperGolem golem) {
-		return get(golem) == null ? null : Job.forTool(golem.getMainHandItem());
+		if (get(golem) == null) {
+			return null;
+		}
+		Item lost = Tools.lostTool(golem);
+		return lost != null ? Job.forTool(lost) : Job.forTool(golem.getMainHandItem());
 	}
 
 	/** Holds a job tool, or still has something in its pouch to bring home. Workers do not sort. */
 	public static boolean isWorker(CopperGolem golem) {
 		WorkerData data = get(golem);
-		return data != null && (Job.forTool(golem.getMainHandItem()) != null || data.pouchCount() > 0);
+		return data != null && (job(golem) != null || data.pouchCount() > 0);
 	}
 
 	public @Nullable BlockPos home() {

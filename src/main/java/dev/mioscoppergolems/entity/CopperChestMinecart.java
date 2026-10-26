@@ -23,11 +23,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecartContainer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChainBlock;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -38,10 +40,12 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 /**
- * A chest minecart with a copper chest that can be towed on an iron chain, off rails, by a player or a copper golem.
+ * A chest minecart with a copper chest that can be towed on an iron or copper chain, off rails, by a player or a copper golem.
  */
 public class CopperChestMinecart extends AbstractMinecartContainer {
 	private static final EntityDataAccessor<Integer> DATA_HOLDER_ID = SynchedEntityData.defineId(CopperChestMinecart.class, EntityDataSerializers.INT);
+	/** The chain the cart is towed with: an iron chain or any copper chain. Synced so it is drawn in its own colour. */
+	private static final EntityDataAccessor<ItemStack> DATA_CHAIN = SynchedEntityData.defineId(CopperChestMinecart.class, EntityDataSerializers.ITEM_STACK);
 	/** Distance the cart keeps behind whoever tows it. */
 	private static final double GOLEM_TOW_DISTANCE = 1.6;
 	private static final double PLAYER_TOW_DISTANCE = 2.5;
@@ -54,6 +58,8 @@ public class CopperChestMinecart extends AbstractMinecartContainer {
 	private static final int MAX_FOOTSTEPS = 64;
 	private static final int MAX_STUCK_TICKS = 20;
 
+	/** The item that made this a double cart (from an add-on), dropped again when the cart breaks; empty if single. */
+	private ItemStack extension = ItemStack.EMPTY;
 	private @Nullable UUID holderUuid;
 	private @Nullable Entity cachedHolder;
 	/** Where the holder walked, oldest first. Not saved: after loading the cart starts a new trail. */
@@ -68,6 +74,7 @@ public class CopperChestMinecart extends AbstractMinecartContainer {
 	protected void defineSynchedData(SynchedEntityData.Builder entityData) {
 		super.defineSynchedData(entityData);
 		entityData.define(DATA_HOLDER_ID, -1);
+		entityData.define(DATA_CHAIN, new ItemStack(Items.IRON_CHAIN));
 	}
 
 	@Override
@@ -82,7 +89,25 @@ public class CopperChestMinecart extends AbstractMinecartContainer {
 
 	@Override
 	public int getContainerSize() {
-		return 27;
+		return this.isExtended() ? 54 : 27;
+	}
+
+	public boolean isExtended() {
+		return !this.extension.isEmpty();
+	}
+
+	/** Makes this a double cart with 54 slots, keeping what is inside. Returns false if it already is one. */
+	public boolean extend(ItemStack extensionItem) {
+		if (this.isExtended()) {
+			return false;
+		}
+		java.util.List<ItemStack> contents = new java.util.ArrayList<>(this.getItemStacks());
+		this.extension = extensionItem.copyWithCount(1);
+		this.clearItemStacks();
+		for (int slot = 0; slot < contents.size(); slot++) {
+			this.getItemStacks().set(slot, contents.get(slot));
+		}
+		return true;
 	}
 
 	@Override
@@ -97,7 +122,7 @@ public class CopperChestMinecart extends AbstractMinecartContainer {
 
 	@Override
 	public AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
-		return ChestMenu.threeRows(containerId, inventory, this);
+		return this.isExtended() ? ChestMenu.sixRows(containerId, inventory, this) : ChestMenu.threeRows(containerId, inventory, this);
 	}
 
 	@Override
@@ -114,10 +139,11 @@ public class CopperChestMinecart extends AbstractMinecartContainer {
 			}
 			return InteractionResult.SUCCESS;
 		}
-		if (held.is(Items.IRON_CHAIN) && this.getHolder() != player) {
+		if (isChain(held) && this.getHolder() != player) {
 			if (!this.level().isClientSide()) {
 				// Re-chaining a cart that is already chained moves the existing chain, no new one is used up.
 				if (!this.isChained()) {
+					this.entityData.set(DATA_CHAIN, held.copyWithCount(1));
 					held.consume(1, player);
 				}
 				this.chainTo(player);
@@ -132,6 +158,16 @@ public class CopperChestMinecart extends AbstractMinecartContainer {
 	}
 
 	// --- chaining ---
+
+	/** An iron chain, or a copper chain of any age, waxed or not. */
+	public static boolean isChain(ItemStack stack) {
+		return stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof ChainBlock;
+	}
+
+	/** The chain this cart is (or was last) towed with. */
+	public ItemStack chain() {
+		return this.entityData.get(DATA_CHAIN);
+	}
 
 	public boolean isChained() {
 		return this.level().isClientSide() ? this.entityData.get(DATA_HOLDER_ID) != -1 : this.holderUuid != null;
@@ -149,7 +185,7 @@ public class CopperChestMinecart extends AbstractMinecartContainer {
 		this.playChainSound();
 	}
 
-	/** Removes the chain; with {@code drop} the iron chain is given back as an item. */
+	/** Removes the chain; with {@code drop} the chain is given back as an item. */
 	public void unchain(boolean drop) {
 		if (this.holderUuid == null) {
 			return;
@@ -160,7 +196,7 @@ public class CopperChestMinecart extends AbstractMinecartContainer {
 		this.entityData.set(DATA_HOLDER_ID, -1);
 		this.playChainSound();
 		if (drop && this.level() instanceof ServerLevel serverLevel && serverLevel.getGameRules().get(GameRules.ENTITY_DROPS)) {
-			this.spawnAtLocation(serverLevel, new ItemStack(Items.IRON_CHAIN));
+			this.spawnAtLocation(serverLevel, this.chain().copy());
 		}
 	}
 
@@ -308,6 +344,9 @@ public class CopperChestMinecart extends AbstractMinecartContainer {
 	@Override
 	public void destroy(ServerLevel level, DamageSource source) {
 		this.unchain(true);
+		if (this.isExtended() && level.getGameRules().get(GameRules.ENTITY_DROPS)) {
+			this.spawnAtLocation(level, this.extension);
+		}
 		super.destroy(level, source);
 	}
 
@@ -315,12 +354,19 @@ public class CopperChestMinecart extends AbstractMinecartContainer {
 	protected void addAdditionalSaveData(ValueOutput output) {
 		super.addAdditionalSaveData(output);
 		output.storeNullable("chain_holder", UUIDUtil.CODEC, this.holderUuid);
+		output.store("chain", ItemStack.CODEC, this.chain());
+		if (this.isExtended()) {
+			output.store("extension", ItemStack.CODEC, this.extension);
+		}
 	}
 
 	@Override
 	protected void readAdditionalSaveData(ValueInput input) {
+		// Before the items: the size of the inventory depends on it.
+		this.extension = input.read("extension", ItemStack.CODEC).orElse(ItemStack.EMPTY);
 		super.readAdditionalSaveData(input);
 		this.holderUuid = input.read("chain_holder", UUIDUtil.CODEC).orElse(null);
+		this.entityData.set(DATA_CHAIN, input.read("chain", ItemStack.CODEC).orElseGet(() -> new ItemStack(Items.IRON_CHAIN)));
 		this.cachedHolder = null;
 	}
 }

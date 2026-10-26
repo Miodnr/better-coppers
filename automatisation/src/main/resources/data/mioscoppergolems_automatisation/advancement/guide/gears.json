@@ -1,0 +1,43 @@
+{
+  "parent": "mioscoppergolems_automatisation:guide/sheets",
+  "criteria": {
+    "copper_gear": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "mioscoppergolems_automatisation:copper_gear"
+          }
+        ]
+      }
+    },
+    "gold_gear": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "mioscoppergolems_automatisation:gold_gear"
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "mioscoppergolems_automatisation:copper_gear"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.gears.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.gears.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "copper_gear",
+      "gold_gear"
+    ]
+  ]
+}

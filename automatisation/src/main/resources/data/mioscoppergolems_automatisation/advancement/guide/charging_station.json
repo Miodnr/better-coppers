@@ -1,0 +1,32 @@
+{
+  "parent": "mioscoppergolems_automatisation:guide/sheets",
+  "criteria": {
+    "charging_station": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "mioscoppergolems_automatisation:charging_station"
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "mioscoppergolems_automatisation:charging_station"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.charging_station.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.charging_station.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "charging_station"
+    ]
+  ]
+}

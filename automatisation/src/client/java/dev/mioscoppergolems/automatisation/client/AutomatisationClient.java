@@ -1,5 +1,6 @@
 package dev.mioscoppergolems.automatisation.client;
 
+import dev.mioscoppergolems.automatisation.client.render.AssemblerRenderer;
 import dev.mioscoppergolems.automatisation.client.render.BeltDriveRenderer;
 import dev.mioscoppergolems.automatisation.client.render.GrabberArmRenderer;
 import dev.mioscoppergolems.automatisation.client.render.PressRenderer;
@@ -15,5 +16,6 @@ public class AutomatisationClient implements ClientModInitializer {
 		BlockEntityRenderers.register(AutoBlockEntities.PRESS, PressRenderer::new);
 		BlockEntityRenderers.register(AutoBlockEntities.SAW, SawRenderer::new);
 		BlockEntityRenderers.register(AutoBlockEntities.GRABBER_ARM, GrabberArmRenderer::new);
+		BlockEntityRenderers.register(AutoBlockEntities.GOLEM_ASSEMBLER, AssemblerRenderer::new);
 	}
 }

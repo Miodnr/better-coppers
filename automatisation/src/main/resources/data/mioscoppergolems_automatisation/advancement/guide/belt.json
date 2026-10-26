@@ -1,0 +1,25 @@
+{
+  "parent": "mioscoppergolems_automatisation:guide/operator",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "mioscoppergolems_automatisation:conveyor_belt"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.belt.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.belt.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

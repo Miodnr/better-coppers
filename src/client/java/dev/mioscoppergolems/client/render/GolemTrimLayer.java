@@ -35,7 +35,7 @@ public class GolemTrimLayer extends RenderLayer<CopperGolemRenderState, CopperGo
 
 	@Override
 	public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, CopperGolemRenderState state, float yRot, float xRot) {
-		ArmorTrim trim = ((TrimmedRenderState) state).mioscoppergolems$getTrim();
+		ArmorTrim trim = ((GolemRenderExtras) state).mioscoppergolems$getTrim();
 		if (trim == null || state.isInvisible) {
 			return;
 		}

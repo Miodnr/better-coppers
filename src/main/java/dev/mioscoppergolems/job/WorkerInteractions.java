@@ -1,5 +1,6 @@
 package dev.mioscoppergolems.job;
 
+import dev.mioscoppergolems.guide.Guide;
 import dev.mioscoppergolems.home.Homes;
 import dev.mioscoppergolems.registry.ModAttachments;
 import dev.mioscoppergolems.upkeep.Upkeep;
@@ -49,9 +50,11 @@ public final class WorkerInteractions {
 			golem.setItemSlot(EquipmentSlot.MAINHAND, held.copyWithCount(1));
 			golem.setGuaranteedDrop(EquipmentSlot.MAINHAND);
 			held.consume(1, player);
+			Tools.clearLost(golem);
 			WorkerData data = WorkerData.getOrCreate(golem);
 			golem.playSound(SoundEvents.COPPER_GOLEM_ITEM_GET);
 			Component jobName = Component.translatable("job.mioscoppergolems." + job.id());
+			Guide.job(player, job.id());
 			player.sendOverlayMessage(
 				Homes.get(golem) == null
 					? Component.translatable("message.mioscoppergolems.worker_no_chest", jobName)

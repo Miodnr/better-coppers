@@ -1,0 +1,25 @@
+{
+  "parent": "mioscoppergolems:guide/guard",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:iron_ingot"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems.guide.repair.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems.guide.repair.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

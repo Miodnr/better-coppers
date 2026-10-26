@@ -17,6 +17,13 @@ public final class AutoItems {
 	public static final Item COPPER_SHEET = register("copper_sheet", Item::new, new Item.Properties());
 	public static final Item IRON_SHEET = register("iron_sheet", Item::new, new Item.Properties());
 	public static final Item GOLD_SHEET = register("gold_sheet", Item::new, new Item.Properties());
+	public static final Item COPPER_GEAR = register("copper_gear", Item::new, new Item.Properties());
+	public static final Item GOLD_GEAR = register("gold_gear", Item::new, new Item.Properties());
+	public static final Item IRON_PLATING = register("iron_plating", Item::new, new Item.Properties().stacksTo(16));
+	public static final Item COPPER_COATING = register("copper_coating", Item::new, new Item.Properties().stacksTo(16));
+	public static final Item GOLD_GEARWORK = register("gold_gearwork", Item::new, new Item.Properties().stacksTo(16));
+	public static final Item COPPER_SATCHEL = register("copper_satchel", Item::new, new Item.Properties().stacksTo(1));
+	public static final Item CART_EXTENSION = register("cart_extension", Item::new, new Item.Properties().stacksTo(16));
 
 	private AutoItems() {
 	}
@@ -32,6 +39,15 @@ public final class AutoItems {
 			output.insertAfter(Items.COPPER_INGOT, COPPER_SHEET);
 			output.insertAfter(Items.IRON_INGOT, IRON_SHEET);
 			output.insertAfter(Items.GOLD_INGOT, GOLD_SHEET);
+			output.insertAfter(COPPER_SHEET, COPPER_GEAR);
+			output.insertAfter(GOLD_SHEET, GOLD_GEAR);
+		});
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> {
+			output.insertAfter(COPPER_WRENCH, IRON_PLATING);
+			output.insertAfter(IRON_PLATING, COPPER_COATING);
+			output.insertAfter(COPPER_COATING, GOLD_GEARWORK);
+			output.insertAfter(GOLD_GEARWORK, COPPER_SATCHEL);
+			output.insertAfter(COPPER_SATCHEL, CART_EXTENSION);
 		});
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.REDSTONE_BLOCKS).register(output -> {
 			output.insertAfter(Items.HOPPER, AutoBlocks.CONVEYOR_BELT);
@@ -41,6 +57,8 @@ public final class AutoItems {
 			output.insertAfter(AutoBlocks.CHUTE, AutoBlocks.PRESS);
 			output.insertAfter(AutoBlocks.PRESS, AutoBlocks.SAW);
 			output.insertAfter(AutoBlocks.SAW, AutoBlocks.GRABBER_ARM);
+			output.insertAfter(AutoBlocks.GRABBER_ARM, AutoBlocks.GOLEM_ASSEMBLER);
+			output.insertAfter(AutoBlocks.GOLEM_ASSEMBLER, AutoBlocks.CHARGING_STATION);
 		});
 	}
 }

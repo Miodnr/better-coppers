@@ -1,5 +1,6 @@
 package dev.mioscoppergolems.job;
 
+import dev.mioscoppergolems.golem.Eyes;
 import dev.mioscoppergolems.golem.Inventories;
 import dev.mioscoppergolems.upkeep.Upkeep;
 import java.util.ArrayDeque;
@@ -66,7 +67,8 @@ public class ForestBehavior extends JobBehavior<ForestBehavior.Task> {
 
 	@Override
 	protected @Nullable Task chooseTask(ServerLevel level, CopperGolem golem, WorkerData data, BlockPos home) {
-		AABB area = new AABB(home).inflate(RADIUS, HEIGHT, RADIUS);
+		int radius = Eyes.radius(golem, RADIUS);
+		AABB area = new AABB(home).inflate(radius, HEIGHT, radius);
 		// Picking up what fell off the trees comes first, before it despawns.
 		ItemEntity drop = level.getEntitiesOfClass(ItemEntity.class, area, item -> item.isAlive() && isForestDrop(item.getItem()) && isOnGround(level, item))
 			.stream()
@@ -86,7 +88,7 @@ public class ForestBehavior extends JobBehavior<ForestBehavior.Task> {
 		// Then the nearest tree.
 		BlockPos best = null;
 		double bestDistance = Double.MAX_VALUE;
-		for (BlockPos mutable : BlockPos.betweenClosed(home.offset(-RADIUS, -HEIGHT, -RADIUS), home.offset(RADIUS, HEIGHT, RADIUS))) {
+		for (BlockPos mutable : BlockPos.betweenClosed(home.offset(-radius, -HEIGHT, -radius), home.offset(radius, HEIGHT, radius))) {
 			if (!level.isLoaded(mutable) || !level.getBlockState(mutable).is(BlockTags.LOGS)) {
 				continue;
 			}
@@ -193,7 +195,7 @@ public class ForestBehavior extends JobBehavior<ForestBehavior.Task> {
 			BlockState state = level.getBlockState(log);
 			Block.getDrops(state, level, log, null, golem, axe).forEach(drop -> stash(golem, data, drop));
 			level.destroyBlock(log, false, golem);
-			axe.hurtAndBreak(1, golem, EquipmentSlot.MAINHAND);
+			Tools.wear(golem, axe);
 			Upkeep.spend(golem, ENERGY_PER_LOG);
 		}
 		if (sapling != null && level.getBlockState(base).isAir()) {

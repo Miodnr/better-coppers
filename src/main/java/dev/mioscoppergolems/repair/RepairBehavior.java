@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import dev.mioscoppergolems.courier.CourierRoute;
 import dev.mioscoppergolems.courier.Couriers;
 import dev.mioscoppergolems.golem.TravelWatch;
+import dev.mioscoppergolems.guide.Guide;
 import dev.mioscoppergolems.home.Homes;
 import dev.mioscoppergolems.registry.ModAttachments;
 import dev.mioscoppergolems.upkeep.Upkeep;
@@ -207,6 +208,7 @@ public class RepairBehavior extends Behavior<CopperGolem> {
 			return;
 		}
 		target.heal(HEAL_PER_INGOT);
+		Guide.awardNearby(level, target.position(), "repair");
 		setCarried(golem, carried(golem) - 1);
 		float pitch = 1.0F + (golem.getRandom().nextFloat() - golem.getRandom().nextFloat()) * 0.2F;
 		level.playSound(null, target, SoundEvents.IRON_GOLEM_REPAIR, target.getSoundSource(), 1.0F, pitch);

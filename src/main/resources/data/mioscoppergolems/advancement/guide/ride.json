@@ -1,0 +1,25 @@
+{
+  "parent": "mioscoppergolems:guide/home",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:minecart"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems.guide.ride.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems.guide.ride.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

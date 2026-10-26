@@ -1,0 +1,34 @@
+{
+  "parent": "mioscoppergolems:guide/root",
+  "criteria": {
+    "built": {
+      "trigger": "minecraft:summoned_entity",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "minecraft:copper_golem"
+          }
+        }
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:carved_pumpkin"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems.guide.build_golem.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems.guide.build_golem.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "built"
+    ]
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "criteria": {
+    "joined": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "mioscoppergolems_automatisation:belt_drive"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.root.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.root.description"
+    },
+    "frame": "task",
+    "background": "minecraft:block/exposed_copper",
+    "show_toast": false,
+    "announce_to_chat": false
+  },
+  "requirements": [
+    [
+      "joined"
+    ]
+  ]
+}

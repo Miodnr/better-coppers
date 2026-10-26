@@ -1,6 +1,8 @@
 package dev.mioscoppergolems.farming;
 
+import dev.mioscoppergolems.guide.Guide;
 import dev.mioscoppergolems.home.Homes;
+import dev.mioscoppergolems.job.Tools;
 import dev.mioscoppergolems.registry.ModAttachments;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -16,6 +18,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.animal.golem.CopperGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import org.jspecify.annotations.Nullable;
@@ -37,7 +40,7 @@ public final class FarmerInteractions {
 			return InteractionResult.PASS;
 		}
 		ItemStack held = player.getItemInHand(hand);
-		if (held.is(ItemTags.HOES)) {
+		if (held.is(Items.COPPER_HOE)) {
 			if (level instanceof ServerLevel serverLevel) {
 				giveHoe(player, serverLevel, golem, held);
 			}
@@ -62,8 +65,10 @@ public final class FarmerInteractions {
 		golem.setItemSlot(EquipmentSlot.MAINHAND, held.copyWithCount(1));
 		golem.setGuaranteedDrop(EquipmentSlot.MAINHAND);
 		held.consume(1, player);
+		Tools.clearLost(golem);
 		FarmerData data = FarmerData.getOrCreate(golem);
 		golem.playSound(SoundEvents.COPPER_GOLEM_ITEM_GET);
+		Guide.job(player, "farmer");
 		player.sendOverlayMessage(Component.translatable(Homes.get(golem) == null ? "message.mioscoppergolems.farmer_no_chest" : "message.mioscoppergolems.farmer_ready"));
 	}
 

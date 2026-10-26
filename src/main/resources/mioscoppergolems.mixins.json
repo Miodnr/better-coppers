@@ -7,7 +7,8 @@
 		"CopperGolemAiMixin",
 		"CopperGolemMixin",
 		"MobAccessor",
-		"NearestAttackableTargetGoalAccessor"
+		"NearestAttackableTargetGoalAccessor",
+		"ServerLevelMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

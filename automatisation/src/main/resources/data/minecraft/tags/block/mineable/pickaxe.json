@@ -5,6 +5,8 @@
     "mioscoppergolems_automatisation:chute",
     "mioscoppergolems_automatisation:press",
     "mioscoppergolems_automatisation:saw",
-    "mioscoppergolems_automatisation:grabber_arm"
+    "mioscoppergolems_automatisation:grabber_arm",
+    "mioscoppergolems_automatisation:golem_assembler",
+    "mioscoppergolems_automatisation:charging_station"
   ]
 }

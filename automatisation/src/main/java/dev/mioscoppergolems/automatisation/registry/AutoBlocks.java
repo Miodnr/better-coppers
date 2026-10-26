@@ -2,8 +2,10 @@ package dev.mioscoppergolems.automatisation.registry;
 
 import dev.mioscoppergolems.automatisation.Automatisation;
 import dev.mioscoppergolems.automatisation.arm.GrabberArmBlock;
+import dev.mioscoppergolems.automatisation.assembler.GolemAssemblerBlock;
 import dev.mioscoppergolems.automatisation.belt.BeltDriveBlock;
 import dev.mioscoppergolems.automatisation.belt.ConveyorBeltBlock;
+import dev.mioscoppergolems.automatisation.charging.ChargingStationBlock;
 import dev.mioscoppergolems.automatisation.chute.ChuteBlock;
 import dev.mioscoppergolems.automatisation.funnel.FunnelBlock;
 import dev.mioscoppergolems.automatisation.machine.MachinePartBlock;
@@ -35,6 +37,13 @@ public final class AutoBlocks {
 	public static final Block PRESS = register("press", PressBlock::new, machine(), true);
 	public static final Block SAW = register("saw", SawBlock::new, machine(), true);
 	public static final Block GRABBER_ARM = register("grabber_arm", GrabberArmBlock::new, machine(), true);
+	public static final Block GOLEM_ASSEMBLER = register("golem_assembler", GolemAssemblerBlock::new, machine(), true);
+	public static final Block CHARGING_STATION = register(
+		"charging_station",
+		ChargingStationBlock::new,
+		BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(3.0F).requiresCorrectToolForDrops().sound(SoundType.COPPER).lightLevel(state -> 7),
+		true
+	);
 	/** Only holds models for the renderers; never placed, no item. */
 	public static final Block MACHINE_PART = register("machine_part", MachinePartBlock::new, BlockBehaviour.Properties.of().noOcclusion().noLootTable(), false);
 

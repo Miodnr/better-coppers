@@ -1,6 +1,8 @@
 package dev.mioscoppergolems.combat;
 
+import dev.mioscoppergolems.guide.Guide;
 import java.util.EnumSet;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -61,6 +63,9 @@ public class DefendCopperGolemsTargetGoal extends TargetGoal {
 	@Override
 	public void start() {
 		this.mob.setTarget(this.attacker);
+		if (this.mob.level() instanceof ServerLevel level) {
+			Guide.awardNearby(level, this.mob.position(), "guard");
+		}
 		super.start();
 	}
 }

@@ -1,0 +1,25 @@
+{
+  "parent": "mioscoppergolems:guide/home",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:copper_hoe"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems.guide.farmer.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems.guide.farmer.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

@@ -34,6 +34,12 @@ public class PressBlockEntity extends ProcessingBlockEntity {
 		);
 	}
 
+	/** A sheet of repairs every 64 stacks. */
+	@Override
+	protected int maxWear() {
+		return 64;
+	}
+
 	@Override
 	public int cycleTicks() {
 		return CYCLE_TICKS;

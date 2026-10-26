@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.mioscoppergolems.entity.CopperChestMinecart;
 import dev.mioscoppergolems.golem.CartChaining;
+import dev.mioscoppergolems.job.Tools;
 import dev.mioscoppergolems.registry.ModAttachments;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Optional;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.animal.golem.CopperGolem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -49,7 +51,7 @@ public final class MinerData {
 	}
 
 	public static boolean hasPickaxe(CopperGolem golem) {
-		return golem.getMainHandItem().is(ItemTags.PICKAXES);
+		return golem.getMainHandItem().is(Items.COPPER_PICKAXE);
 	}
 
 	/** A golem that was handed a pickaxe, or still has mined items to bring home. Miners do not sort. */
@@ -58,7 +60,7 @@ public final class MinerData {
 		if (data == null) {
 			return false;
 		}
-		if (hasPickaxe(golem) || data.lootCount() > 0) {
+		if (hasPickaxe(golem) || Tools.hasLost(golem, Items.COPPER_PICKAXE) || data.lootCount() > 0) {
 			return true;
 		}
 		CopperChestMinecart cart = data.plan() == null ? null : CartChaining.findCart(golem);

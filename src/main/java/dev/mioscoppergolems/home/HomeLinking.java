@@ -4,6 +4,7 @@ import dev.mioscoppergolems.api.GolemLinkTarget;
 import dev.mioscoppergolems.api.MiosCoppergolemsApi;
 import dev.mioscoppergolems.courier.CourierRoute;
 import dev.mioscoppergolems.courier.Couriers;
+import dev.mioscoppergolems.guide.Guide;
 import dev.mioscoppergolems.upkeep.Upkeep;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +44,8 @@ public final class HomeLinking {
 	private static final int SELECTION_TICKS = 600;
 	private static final int ROUTE_TICKS = 12000;
 	private static final double MAX_DISTANCE = 32.0;
+	/** A route this long earns the "Long Haul" guide step. */
+	private static final int LONG_HAUL = 500;
 
 	private record Selection(UUID golem, ResourceKey<Level> dimension, long until, @Nullable BlockPos routeStart) {
 	}
@@ -119,6 +122,7 @@ public final class HomeLinking {
 		serverLevel.playSound(null, pos, SoundEvents.COPPER_GOLEM_ITEM_DROP, SoundSource.NEUTRAL, 1.0F, 1.2F);
 		HomeDisplay.drawLine(serverLevel, golem, pos, null);
 		player.sendOverlayMessage(Component.translatable("message.mioscoppergolems.home_set", pos.getX(), pos.getY(), pos.getZ()));
+		Guide.award(player, "home");
 		return InteractionResult.SUCCESS;
 	}
 
@@ -135,6 +139,10 @@ public final class HomeLinking {
 		}
 		level.playSound(null, pos, SoundEvents.COPPER_GOLEM_ITEM_DROP, SoundSource.NEUTRAL, 1.0F, 1.2F);
 		player.sendOverlayMessage(Component.translatable("message.mioscoppergolems.route_set", (int) Math.sqrt(start.distSqr(pos))));
+		Guide.job(player, "courier");
+		if (start.distSqr(pos) >= LONG_HAUL * LONG_HAUL) {
+			Guide.award(player, "long_haul");
+		}
 		return InteractionResult.SUCCESS;
 	}
 

@@ -1,0 +1,25 @@
+{
+  "parent": "mioscoppergolems:guide/sorter",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "mioscoppergolems:copper_chest_minecart"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems.guide.cart.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems.guide.cart.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

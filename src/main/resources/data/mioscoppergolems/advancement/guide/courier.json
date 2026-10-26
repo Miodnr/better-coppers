@@ -1,0 +1,25 @@
+{
+  "parent": "mioscoppergolems:guide/home",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:barrel"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems.guide.courier.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems.guide.courier.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

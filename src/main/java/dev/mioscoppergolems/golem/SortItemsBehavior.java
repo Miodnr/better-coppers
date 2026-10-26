@@ -14,6 +14,7 @@ import dev.mioscoppergolems.job.CraftBehavior;
 import dev.mioscoppergolems.job.FishBehavior;
 import dev.mioscoppergolems.job.ForestBehavior;
 import dev.mioscoppergolems.job.KeeperBehavior;
+import dev.mioscoppergolems.job.ToolFetchBehavior;
 import dev.mioscoppergolems.mining.MineBehavior;
 import dev.mioscoppergolems.mining.MinerData;
 import dev.mioscoppergolems.repair.Errands;
@@ -47,7 +48,6 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.behavior.BlockPosTracker;
 import net.minecraft.world.entity.ai.behavior.DoNothing;
-import net.minecraft.world.entity.ai.behavior.RandomStroll;
 import net.minecraft.world.entity.ai.behavior.RunOne;
 import net.minecraft.world.entity.ai.behavior.SetEntityLookTargetSometimes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -55,6 +55,7 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.animal.golem.CopperGolem;
 import net.minecraft.world.entity.animal.golem.CopperGolemState;
+import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
@@ -111,27 +112,41 @@ public class SortItemsBehavior extends Behavior<CopperGolem> {
 		DELIVER
 	}
 
-	/** Where an item may go, in order of preference. */
+	/**
+	 * Where an item may go, in order of preference. A chest or barrel with item frames on it is reserved: it takes the
+	 * items its frames show, and nothing else.
+	 */
 	private enum Tier {
+		FRAMED,
 		MATCHING_CHEST,
 		BARREL,
 		EMPTY_CHEST;
 
 		boolean accepts(Spot spot, ItemStack item) {
+			if (this == FRAMED) {
+				return spot.kind != Kind.SOURCE && showsItem(spot.frames, item) && hasRoom(spot.container, item);
+			}
+			if (!spot.frames.isEmpty()) {
+				return false;
+			}
 			return switch (this) {
 				case MATCHING_CHEST -> spot.kind == Kind.CHEST && containsItem(spot.container, item) && hasRoom(spot.container, item);
 				case BARREL -> spot.kind == Kind.BARREL && hasRoom(spot.container, item);
 				case EMPTY_CHEST -> spot.kind == Kind.CHEST && spot.container.isEmpty();
+				case FRAMED -> false;
 			};
 		}
 	}
 
-	private record Spot(BlockPos pos, Kind kind, Container container) {
+	/** {@code frames}: the items shown in item frames hung on this container (either half of a double chest). */
+	private record Spot(BlockPos pos, Kind kind, Container container, List<ItemStack> frames) {
 	}
 
 	private @Nullable BlockPos target;
 	private Purpose purpose = Purpose.PICKUP;
 	private Tier tier = Tier.MATCHING_CHEST;
+	/** What the frames on the current delivery target show. */
+	private List<ItemStack> targetFrames = List.of();
 	private boolean interacting;
 	private int ticks;
 	private final ArrayDeque<BlockPos> decoys = new ArrayDeque<>();
@@ -161,7 +176,8 @@ public class SortItemsBehavior extends Behavior<CopperGolem> {
 				Pair.of(0, new ForestBehavior()),
 				Pair.of(0, new FishBehavior()),
 				Pair.of(0, new KeeperBehavior()),
-				Pair.of(0, new CraftBehavior())
+				Pair.of(0, new CraftBehavior()),
+				Pair.of(0, new ToolFetchBehavior())
 			)
 		);
 		MiosCoppergolemsApi.behaviors().forEach(factory -> behaviors.add(Pair.of(0, factory.get())));
@@ -173,7 +189,7 @@ public class SortItemsBehavior extends Behavior<CopperGolem> {
 				2,
 				new RunOne<>(
 					ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.TRANSPORT_ITEMS_COOLDOWN_TICKS, MemoryStatus.VALUE_PRESENT),
-					ImmutableList.of(Pair.of(RandomStroll.stroll(1.0F, 2, 2), 1), Pair.of(new DoNothing(30, 60), 1))
+					ImmutableList.of(Pair.of(new HomeStroll(), 1), Pair.of(new DoNothing(30, 60), 1))
 				)
 			)
 		);
@@ -259,7 +275,7 @@ public class SortItemsBehavior extends Behavior<CopperGolem> {
 		CopperChestMinecart cart = CartChaining.findCart(golem);
 		ItemStack hand = golem.getMainHandItem();
 		if (hand.isEmpty() && cart != null && !cart.isEmpty()) {
-			hand = takeFirst(cart, HAND_LIMIT);
+			hand = takeFirst(cart, MiosCoppergolemsApi.carryLimit(golem, HAND_LIMIT));
 			this.setHandItem(golem, hand);
 		}
 
@@ -292,7 +308,10 @@ public class SortItemsBehavior extends Behavior<CopperGolem> {
 				}
 			}
 			this.tier = tier;
-			return this.targetNearestReachable(level, golem, now, spots, spot -> tier.accepts(spot, item), Purpose.DELIVER);
+			boolean found = this.targetNearestReachable(level, golem, now, spots, spot -> tier.accepts(spot, item), Purpose.DELIVER);
+			BlockPos target = this.target;
+			this.targetFrames = spots.stream().filter(spot -> spot.pos.equals(target)).findFirst().map(Spot::frames).orElse(List.of());
+			return found;
 		}
 		return false;
 	}
@@ -494,7 +513,7 @@ public class SortItemsBehavior extends Behavior<CopperGolem> {
 		if (kind.isEmpty()) {
 			return;
 		}
-		ItemStack hand = Inventories.takeFirst(source, HAND_LIMIT, sortable);
+		ItemStack hand = Inventories.takeFirst(source, MiosCoppergolemsApi.carryLimit(golem, HAND_LIMIT), sortable);
 		CopperChestMinecart cart = CartChaining.findCart(golem);
 		if (cart != null) {
 			for (int slot = 0; slot < source.getContainerSize(); slot++) {
@@ -515,6 +534,7 @@ public class SortItemsBehavior extends Behavior<CopperGolem> {
 		ItemStack hand = golem.getMainHandItem();
 		ItemStack delivered = hand.copyWithCount(1);
 		boolean matchingChest = this.tier == Tier.MATCHING_CHEST;
+		boolean framed = this.tier == Tier.FRAMED;
 		ItemStack left = insert(destination, hand);
 		this.setHandItem(golem, left);
 		this.deliveryPrepared = false;
@@ -524,7 +544,8 @@ public class SortItemsBehavior extends Behavior<CopperGolem> {
 			// Unload everything of the same kind, and into a sorted chest also anything else it already holds.
 			for (int slot = 0; slot < cart.getContainerSize(); slot++) {
 				ItemStack stack = cart.getItem(slot);
-				if (!stack.isEmpty() && (ItemStack.isSameItem(stack, delivered) || matchingChest && containsItem(destination, stack))) {
+				boolean belongs = framed ? showsItem(this.targetFrames, stack) : ItemStack.isSameItem(stack, delivered) || matchingChest && containsItem(destination, stack);
+				if (!stack.isEmpty() && belongs) {
 					cart.setItem(slot, insert(destination, stack));
 				}
 			}
@@ -543,9 +564,15 @@ public class SortItemsBehavior extends Behavior<CopperGolem> {
 	// --- world queries ---
 
 	private List<Spot> scan(ServerLevel level, CopperGolem golem, long now) {
-		AABB area = new AABB(golem.blockPosition()).inflate(HORIZONTAL_RANGE, VERTICAL_RANGE, HORIZONTAL_RANGE);
+		int range = Eyes.radius(golem, HORIZONTAL_RANGE);
+		AABB area = new AABB(golem.blockPosition()).inflate(range, VERTICAL_RANGE, range);
 		List<Spot> spots = new ArrayList<>();
-		for (ChunkPos chunkPos : ChunkPos.rangeClosed(ChunkPos.containing(golem.blockPosition()), HORIZONTAL_RANGE / 16 + 1).toList()) {
+		Map<BlockPos, List<ItemStack>> frames = new HashMap<>();
+		for (ItemFrame frame : level.getEntitiesOfClass(ItemFrame.class, area.inflate(1.0), frame -> !frame.getItem().isEmpty())) {
+			// A frame hangs on the block behind it.
+			frames.computeIfAbsent(frame.getPos().relative(frame.getDirection().getOpposite()), pos -> new ArrayList<>()).add(frame.getItem());
+		}
+		for (ChunkPos chunkPos : ChunkPos.rangeClosed(ChunkPos.containing(golem.blockPosition()), range / 16 + 1).toList()) {
 			LevelChunk chunk = level.getChunkSource().getChunkNow(chunkPos.x(), chunkPos.z());
 			if (chunk == null) {
 				continue;
@@ -558,11 +585,24 @@ public class SortItemsBehavior extends Behavior<CopperGolem> {
 				Kind kind = kindOf(blockEntity.getBlockState());
 				Container container = kind == null ? null : containerOf(level, pos, blockEntity);
 				if (container != null) {
-					spots.add(new Spot(pos, kind, container));
+					List<ItemStack> shown = new ArrayList<>();
+					for (BlockPos part : sameContainer(level, pos)) {
+						shown.addAll(frames.getOrDefault(part, List.of()));
+					}
+					spots.add(new Spot(pos, kind, container, shown));
 				}
 			}
 		}
 		return spots;
+	}
+
+	private static boolean showsItem(List<ItemStack> frames, ItemStack item) {
+		for (ItemStack shown : frames) {
+			if (ItemStack.isSameItem(shown, item)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private static @Nullable Kind kindOf(BlockState state) {

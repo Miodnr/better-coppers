@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.golem.CopperGolem;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -81,7 +82,8 @@ public class ConveyorBeltBlockEntity extends BlockEntity {
 			// Sneaking players can stand still on a running belt, like on a slow escalator.
 			return !player.isShiftKeyDown() && !player.getAbilities().flying;
 		}
-		return entity instanceof ItemEntity || entity instanceof LivingEntity;
+		// Copper golems work here: they walk across belts instead of getting carried off (and pinned against machines).
+		return entity instanceof ItemEntity || entity instanceof LivingEntity && !(entity instanceof CopperGolem);
 	}
 
 	/** Pushes the entity along the belt and nudges it back towards the middle. */

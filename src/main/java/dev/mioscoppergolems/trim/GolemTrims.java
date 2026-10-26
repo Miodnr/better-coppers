@@ -1,5 +1,6 @@
 package dev.mioscoppergolems.trim;
 
+import dev.mioscoppergolems.guide.Guide;
 import dev.mioscoppergolems.registry.ModAttachments;
 import java.util.Optional;
 import net.minecraft.core.Holder;
@@ -82,6 +83,7 @@ public final class GolemTrims {
 		ArmorTrim current = trim(golem);
 		if (current != null) {
 			golem.setAttached(ModAttachments.TRIM, new ArmorTrim(current.material(), pattern.get()));
+			Guide.award(player, "trim");
 		} else {
 			player.sendOverlayMessage(Component.translatable("message.mioscoppergolems.trim_needs_material"));
 		}
@@ -102,6 +104,7 @@ public final class GolemTrims {
 		}
 		golem.setAttached(ModAttachments.TRIM, trim);
 		held.consume(1, player);
+		Guide.award(player, "trim");
 		golem.playSound(SoundEvents.SMITHING_TABLE_USE);
 		return InteractionResult.SUCCESS;
 	}

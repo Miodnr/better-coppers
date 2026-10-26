@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "cooling=false": {
+      "model": "mioscoppergolems:block/charging_pad"
+    },
+    "cooling=true": {
+      "model": "mioscoppergolems:block/charging_pad_lit"
+    }
+  }
+}

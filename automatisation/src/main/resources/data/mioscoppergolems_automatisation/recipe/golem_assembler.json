@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "I": "mioscoppergolems_automatisation:iron_sheet",
+    "X": "minecraft:crafter",
+    "G": "mioscoppergolems_automatisation:copper_gear",
+    "C": "minecraft:copper_block",
+    "R": "minecraft:redstone_block"
+  },
+  "pattern": [
+    "IXI",
+    "GCG",
+    "IRI"
+  ],
+  "result": {
+    "id": "mioscoppergolems_automatisation:golem_assembler",
+    "count": 1
+  }
+}

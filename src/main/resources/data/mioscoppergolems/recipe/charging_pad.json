@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "CLC",
+    "CRC"
+  ],
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "L": "minecraft:lightning_rod",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "mioscoppergolems:charging_pad"
+  }
+}

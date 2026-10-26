@@ -10,13 +10,15 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 
 /**
- * Vanilla chest minecart rendering, plus a sagging iron chain built from chain block models running to the holder.
+ * Vanilla chest minecart rendering, plus a sagging chain (iron or copper, whichever was used) built from chain block models running to the holder.
  */
 public class CopperChestMinecartRenderer extends AbstractMinecartRenderer<CopperChestMinecart, CopperChestMinecartRenderState> {
 	private static final double CHAIN_HEIGHT_ON_CART = 0.55;
@@ -42,7 +44,8 @@ public class CopperChestMinecartRenderer extends AbstractMinecartRenderer<Copper
 			return;
 		}
 		state.chainEnd = holder.getRopeHoldPosition(partialTicks).subtract(cart.getPosition(partialTicks));
-		this.blockModelResolver.update(state.chainModel, Blocks.IRON_CHAIN.defaultBlockState(), BLOCK_DISPLAY_CONTEXT);
+		Block chain = cart.chain().getItem() instanceof BlockItem blockItem ? blockItem.getBlock() : Blocks.IRON_CHAIN;
+		this.blockModelResolver.update(state.chainModel, chain.defaultBlockState(), BLOCK_DISPLAY_CONTEXT);
 	}
 
 	@Override

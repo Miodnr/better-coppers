@@ -1,0 +1,25 @@
+{
+  "parent": "mioscoppergolems:guide/home",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:gold_block"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems.guide.eyes.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems.guide.eyes.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

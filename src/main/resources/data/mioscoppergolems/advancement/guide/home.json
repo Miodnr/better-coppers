@@ -1,0 +1,25 @@
+{
+  "parent": "mioscoppergolems:guide/build_golem",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:copper_chest"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems.guide.home.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems.guide.home.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

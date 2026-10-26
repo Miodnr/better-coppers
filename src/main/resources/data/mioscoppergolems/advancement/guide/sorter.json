@@ -1,0 +1,25 @@
+{
+  "parent": "mioscoppergolems:guide/home",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:bundle"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems.guide.sorter.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems.guide.sorter.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

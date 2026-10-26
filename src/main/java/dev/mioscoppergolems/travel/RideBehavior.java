@@ -2,6 +2,7 @@ package dev.mioscoppergolems.travel;
 
 import com.google.common.collect.ImmutableMap;
 import dev.mioscoppergolems.golem.CartChaining;
+import dev.mioscoppergolems.guide.Guide;
 import dev.mioscoppergolems.upkeep.Upkeep;
 import java.util.HashMap;
 import java.util.Map;
@@ -192,6 +193,9 @@ public class RideBehavior extends Behavior<CopperGolem> {
 		}
 		if (golem.startRiding(ride)) {
 			this.riding = true;
+			if (golem.level() instanceof ServerLevel level) {
+				Guide.awardNearby(level, golem.position(), "ride");
+			}
 			this.ticks = 0;
 			golem.getNavigation().stop();
 		} else {

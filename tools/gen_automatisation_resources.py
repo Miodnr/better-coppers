@@ -112,6 +112,29 @@ model(
 )
 machine_states("grabber_arm")
 
+# --- golem assembler: a crafter-like workshop; the crank is drawn by the renderer ---
+model(
+    "golem_assembler",
+    {
+        "particle": "minecraft:block/crafter_north",
+        "north": "minecraft:block/crafter_north",
+        "south": "minecraft:block/crafter_south",
+        "east": "minecraft:block/crafter_east",
+        "west": "minecraft:block/crafter_west",
+        "up": "minecraft:block/crafter_top",
+        "down": "minecraft:block/crafter_bottom",
+    },
+    [box([0, 0, 0], [16, 16, 16], {f: "#" + f for f in ["north", "south", "east", "west", "up", "down"]})],
+)
+machine_states("golem_assembler")
+
+# --- charging station: a gilded pad ---
+write(
+    os.path.join(A, "models", "block", "charging_station.json"),
+    {"parent": "minecraft:block/cube_bottom_top", "textures": {"top": "minecraft:block/copper_bulb_lit_powered", "side": "minecraft:block/chiseled_copper", "bottom": "minecraft:block/copper_block"}},
+)
+write(os.path.join(A, "blockstates", "charging_station.json"), {"variants": {"": {"model": f"{NS}:block/charging_station"}}})
+
 # --- funnel: built with the mouth up, turned like a barrel ---
 for pushing in (False, True):
     name = "funnel_pushing" if pushing else "funnel"
@@ -191,10 +214,10 @@ for part, (textures, elements) in parts.items():
 write(os.path.join(A, "blockstates", "machine_part.json"), {"variants": {f"part={p}": {"model": f"{NS}:block/part_{p}"} for p in parts}})
 
 # --- items ---
-BLOCKS = ["conveyor_belt", "belt_drive", "funnel", "chute", "press", "saw", "grabber_arm"]
+BLOCKS = ["conveyor_belt", "belt_drive", "funnel", "chute", "press", "saw", "grabber_arm", "golem_assembler", "charging_station"]
 for b in BLOCKS:
     write(os.path.join(A, "items", b + ".json"), {"model": {"type": "minecraft:model", "model": f"{NS}:block/{b}"}})
-for i in ["copper_wrench", "copper_sheet", "iron_sheet", "gold_sheet"]:
+for i in ["copper_wrench", "copper_sheet", "iron_sheet", "gold_sheet", "copper_gear", "gold_gear", "iron_plating", "copper_coating", "gold_gearwork", "copper_satchel", "cart_extension"]:
     write(os.path.join(A, "items", i + ".json"), {"model": {"type": "minecraft:model", "model": f"{NS}:item/{i}"}})
     parent = "minecraft:item/handheld" if i == "copper_wrench" else "minecraft:item/generated"
     write(os.path.join(A, "models", "item", i + ".json"), {"parent": parent, "textures": {"layer0": f"{NS}:item/{i}"}})
@@ -220,6 +243,28 @@ shaped("press", ["CBC", "C C", "PIP"], {"C": "minecraft:copper_ingot", "B": "min
 shaped("saw", ["CCC", "C C", " X "], {"C": f"{NS}:copper_sheet", "X": "minecraft:stonecutter"})
 shaped("grabber_arm", [" G ", "SCS", "SBS"], {"G": "minecraft:crafter", "S": f"{NS}:iron_sheet", "C": "minecraft:copper_ingot", "B": "minecraft:copper_block"})
 
+
+def shapeless(name, ingredients, count=1, category="misc", result=None):
+    write(
+        os.path.join(D, "recipe", name + ".json"),
+        {"type": "minecraft:crafting_shapeless", "category": category, "ingredients": ingredients, "result": {"id": result or f"{NS}:{name}", "count": count}},
+    )
+
+
+S = f"{NS}:"
+shaped("golem_assembler", ["IXI", "GCG", "IRI"], {"I": S + "iron_sheet", "X": "minecraft:crafter", "G": S + "copper_gear", "C": "minecraft:copper_block", "R": "minecraft:redstone_block"})
+shaped("charging_station", ["GRG", "CBC"], {"G": S + "gold_sheet", "R": "minecraft:redstone_block", "C": "minecraft:copper_ingot", "B": "minecraft:copper_block"})
+shaped("iron_plating", ["I I", "III"], {"I": S + "iron_sheet"}, category="equipment")
+shapeless("copper_coating", [S + "copper_sheet", S + "copper_sheet", S + "copper_sheet", "minecraft:honeycomb"], category="equipment")
+shapeless("gold_gearwork", [S + "gold_gear", S + "gold_gear", S + "copper_gear", "minecraft:redstone"], category="equipment")
+shaped("copper_satchel", ["LSL", "L L", "LLL"], {"L": "minecraft:leather", "S": S + "copper_sheet"}, category="equipment")
+shaped("cart_extension", ["S S", "SCS"], {"S": S + "copper_sheet", "C": "#c:chests/wooden"}, category="misc")
+# Rails from iron sheets: four sheets make as many rails as six ingots do by hand.
+write(
+    os.path.join(D, "recipe", "rail_from_iron_sheets.json"),
+    {"type": "minecraft:crafting_shaped", "category": "misc", "key": {"S": S + "iron_sheet", "K": "minecraft:stick"}, "pattern": ["S S", "SKS"], "result": {"id": "minecraft:rail", "count": 16}},
+)
+
 # --- mining: machines need a pickaxe ---
-write(os.path.join(ROOT, "data", "minecraft", "tags", "block", "mineable", "pickaxe.json"), {"values": [f"{NS}:{b}" for b in ["belt_drive", "funnel", "chute", "press", "saw", "grabber_arm"]]})
+write(os.path.join(ROOT, "data", "minecraft", "tags", "block", "mineable", "pickaxe.json"), {"values": [f"{NS}:{b}" for b in ["belt_drive", "funnel", "chute", "press", "saw", "grabber_arm", "golem_assembler", "charging_station"]]})
 print("ok")

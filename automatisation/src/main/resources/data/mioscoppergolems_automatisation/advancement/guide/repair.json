@@ -1,0 +1,25 @@
+{
+  "parent": "mioscoppergolems_automatisation:guide/operator",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:anvil"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.repair.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.repair.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

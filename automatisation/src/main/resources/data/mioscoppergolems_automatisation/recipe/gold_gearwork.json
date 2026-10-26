@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "mioscoppergolems_automatisation:gold_gear",
+    "mioscoppergolems_automatisation:gold_gear",
+    "mioscoppergolems_automatisation:copper_gear",
+    "minecraft:redstone"
+  ],
+  "result": {
+    "id": "mioscoppergolems_automatisation:gold_gearwork",
+    "count": 1
+  }
+}

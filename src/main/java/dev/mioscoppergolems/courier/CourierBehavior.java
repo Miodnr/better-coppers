@@ -1,6 +1,7 @@
 package dev.mioscoppergolems.courier;
 
 import com.google.common.collect.ImmutableMap;
+import dev.mioscoppergolems.api.MiosCoppergolemsApi;
 import dev.mioscoppergolems.entity.CopperChestMinecart;
 import dev.mioscoppergolems.golem.CartChaining;
 import dev.mioscoppergolems.golem.Inventories;
@@ -149,7 +150,7 @@ public class CourierBehavior extends Behavior<CopperGolem> {
 	}
 
 	private static void load(CopperGolem golem, Container from) {
-		ItemStack hand = Inventories.takeFirst(from, HAND_LIMIT, stack -> true);
+		ItemStack hand = Inventories.takeFirst(from, MiosCoppergolemsApi.carryLimit(golem, HAND_LIMIT), stack -> true);
 		golem.setItemSlot(EquipmentSlot.MAINHAND, hand);
 		golem.setGuaranteedDrop(EquipmentSlot.MAINHAND);
 		CopperChestMinecart cart = CartChaining.findCart(golem);

@@ -1,0 +1,25 @@
+{
+  "parent": "mioscoppergolems:guide/home",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "mioscoppergolems:charging_pad"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems.guide.recharge.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems.guide.recharge.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

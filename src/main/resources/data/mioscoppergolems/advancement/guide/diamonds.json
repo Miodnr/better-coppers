@@ -1,0 +1,25 @@
+{
+  "parent": "mioscoppergolems:guide/miner",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:diamond"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems.guide.diamonds.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems.guide.diamonds.description"
+    },
+    "frame": "goal"
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

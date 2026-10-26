@@ -1,14 +1,17 @@
 package dev.mioscoppergolems.upkeep;
 
 import dev.mioscoppergolems.api.GolemJob;
+import dev.mioscoppergolems.api.GolemModifier;
 import dev.mioscoppergolems.api.MiosCoppergolemsApi;
 import dev.mioscoppergolems.courier.CourierRoute;
 import dev.mioscoppergolems.courier.Couriers;
 import dev.mioscoppergolems.farming.FarmerData;
 import dev.mioscoppergolems.farming.FarmerInteractions;
+import dev.mioscoppergolems.golem.Eyes;
 import dev.mioscoppergolems.golem.Sorter;
 import dev.mioscoppergolems.home.Homes;
 import dev.mioscoppergolems.job.Job;
+import dev.mioscoppergolems.job.Tools;
 import dev.mioscoppergolems.job.WorkerData;
 import dev.mioscoppergolems.job.WorkerInteractions;
 import dev.mioscoppergolems.mining.MinerData;
@@ -20,10 +23,13 @@ import dev.mioscoppergolems.repair.RepairBehavior;
 import dev.mioscoppergolems.trim.GolemTrims;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.animal.golem.CopperGolem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.WeatheringCopper;
 
 /**
@@ -31,7 +37,7 @@ import net.minecraft.world.level.block.WeatheringCopper;
  * golems work like in vanilla and cost nothing.
  * <ul>
  * <li><b>Energy:</b> every bit of work uses some. At night, or when empty, the golem recharges standing on a
- * redstone-powered block (see {@link ChargeBehavior}). Without energy it does not work.</li>
+ * Charging Pad driven by a redstone clock (see {@link ChargeBehavior}). Without energy it does not work.</li>
  * <li><b>Rust:</b> work wears the golem down; every {@link #WEAR_PER_STAGE} energy spent it rusts one stage. Rusty
  * golems are slower, fully oxidized or waxed golems do not work at all. An axe (by hand or from a dispenser) scrapes
  * them clean again.</li>
@@ -68,18 +74,30 @@ public final class Upkeep {
 
 	/** How fast a golem works and walks; rust makes it slower. */
 	public static float speed(CopperGolem golem) {
-		return switch (golem.getWeatherState()) {
+		float speed = switch (golem.getWeatherState()) {
 			case UNAFFECTED -> 1.0F;
 			case EXPOSED -> 0.85F;
 			case WEATHERED -> 0.7F;
 			case OXIDIZED -> 0.5F;
 		};
+		for (GolemModifier modifier : MiosCoppergolemsApi.modifiers()) {
+			speed *= modifier.speed(golem);
+		}
+		return speed;
 	}
 
 	/** Uses up energy for a piece of work and lets the golem rust a bit. */
 	public static void spend(CopperGolem golem, int energy) {
 		GolemUpkeep upkeep = get(golem);
 		upkeep.setEnergy(upkeep.energy() - energy);
+		boolean rustProof = false;
+		for (GolemModifier modifier : MiosCoppergolemsApi.modifiers()) {
+			rustProof |= modifier.preventsRust(golem);
+			modifier.onSpend(golem, energy);
+		}
+		if (rustProof) {
+			return;
+		}
 		upkeep.setWear(upkeep.wear() + energy);
 		if (upkeep.wear() >= WEAR_PER_STAGE) {
 			upkeep.setWear(0);
@@ -149,9 +167,23 @@ public final class Upkeep {
 		}
 		int percent = get(golem).energy() * 100 / GolemUpkeep.MAX_ENERGY;
 		String rust = isWaxed(golem) ? "waxed" : golem.getWeatherState().getSerializedName();
-		return Component.translatable(
+		MutableComponent status = Component.translatable(
 			"message.mioscoppergolems.status", job, homeText, percent, Component.translatable("rust.mioscoppergolems." + rust)
 		);
+		Item lost = Tools.lostTool(golem);
+		if (lost != null) {
+			status.append(", ").append(Component.translatable("status.mioscoppergolems.lost_tool", new ItemStack(lost).getHoverName()));
+		}
+		if (Eyes.tier(golem) > 0) {
+			status.append(", ").append(Component.translatable("status.mioscoppergolems.eyes", Math.round(Eyes.multiplier(golem) * 100)));
+		}
+		for (GolemModifier modifier : MiosCoppergolemsApi.modifiers()) {
+			Component extra = modifier.status(golem);
+			if (extra != null) {
+				status.append(", ").append(extra);
+			}
+		}
+		return status;
 	}
 
 	private static Component jobName(CopperGolem golem) {
@@ -183,6 +215,9 @@ public final class Upkeep {
 	/** Drops everything a working golem carries for its job (on death or when turning into a statue). */
 	public static void dropJobItems(CopperGolem golem) {
 		MinerInteractions.dropAll(golem);
+		if (golem.level() instanceof ServerLevel serverLevel) {
+			Eyes.drop(serverLevel, golem);
+		}
 		FarmerInteractions.dropAll(golem);
 		WorkerInteractions.dropAll(golem);
 		if (golem.level() instanceof ServerLevel level) {
@@ -190,6 +225,9 @@ public final class Upkeep {
 			GolemTrims.dropAll(level, golem);
 			for (GolemJob job : MiosCoppergolemsApi.jobs()) {
 				job.dropItems(level, golem);
+			}
+			for (GolemModifier modifier : MiosCoppergolemsApi.modifiers()) {
+				modifier.dropItems(level, golem);
 			}
 		}
 	}

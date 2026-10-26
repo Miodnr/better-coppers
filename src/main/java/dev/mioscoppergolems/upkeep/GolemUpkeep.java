@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 /**
- * Energy and wear of a working golem. Energy is spent on every bit of work and recharged on a redstone-powered block;
+ * Energy and wear of a working golem. Energy is spent on every bit of work and recharged on a Charging Pad;
  * wear adds up with the work done and makes the golem rust a stage further every so often.
  */
 public final class GolemUpkeep {

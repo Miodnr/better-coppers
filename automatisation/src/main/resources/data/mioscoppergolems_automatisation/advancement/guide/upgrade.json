@@ -1,0 +1,25 @@
+{
+  "parent": "mioscoppergolems_automatisation:guide/sheets",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "mioscoppergolems_automatisation:iron_plating"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.upgrade.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.upgrade.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

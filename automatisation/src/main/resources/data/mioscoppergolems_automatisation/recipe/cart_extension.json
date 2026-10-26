@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "S": "mioscoppergolems_automatisation:copper_sheet",
+    "C": "#c:chests/wooden"
+  },
+  "pattern": [
+    "S S",
+    "SCS"
+  ],
+  "result": {
+    "id": "mioscoppergolems_automatisation:cart_extension",
+    "count": 1
+  }
+}

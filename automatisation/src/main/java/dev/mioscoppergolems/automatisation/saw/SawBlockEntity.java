@@ -2,10 +2,13 @@ package dev.mioscoppergolems.automatisation.saw;
 
 import dev.mioscoppergolems.automatisation.machine.ProcessingBlockEntity;
 import dev.mioscoppergolems.automatisation.registry.AutoBlockEntities;
+import dev.mioscoppergolems.automatisation.registry.AutoItems;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -23,7 +26,10 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
-/** Cuts the whole stack in one go: logs into planks, or stone-like blocks into whatever the filter asks for. */
+/**
+ * Cuts the whole stack in one go: sheets into gears, logs into planks, planks into the fences, slabs or stairs the
+ * filter shows, and stone-like blocks into whatever the filter asks for.
+ */
 public class SawBlockEntity extends ProcessingBlockEntity {
 	public static final int CYCLE_TICKS = 50;
 	public static final int HIT_TICK = 40;
@@ -44,6 +50,11 @@ public class SawBlockEntity extends ProcessingBlockEntity {
 	}
 
 	@Override
+	protected int maxWear() {
+		return 64;
+	}
+
+	@Override
 	public int cycleTicks() {
 		return CYCLE_TICKS;
 	}
@@ -55,7 +66,13 @@ public class SawBlockEntity extends ProcessingBlockEntity {
 
 	@Override
 	protected @Nullable List<ItemStack> process(ServerLevel level, ItemStack input) {
-		ItemStack perItem = planksFrom(level, input);
+		ItemStack perItem = gearFrom(input);
+		if (perItem == null && !this.filter.isEmpty()) {
+			perItem = woodworkFrom(input, this.filter);
+		}
+		if (perItem == null) {
+			perItem = planksFrom(level, input);
+		}
 		if (perItem == null && !this.filter.isEmpty()) {
 			perItem = cutInto(level, input, this.filter);
 		}
@@ -70,6 +87,38 @@ public class SawBlockEntity extends ProcessingBlockEntity {
 			total -= count;
 		}
 		return results;
+	}
+
+	/** Copper and gold sheets are cut into gears. */
+	private static @Nullable ItemStack gearFrom(ItemStack input) {
+		if (input.is(AutoItems.COPPER_SHEET)) {
+			return new ItemStack(AutoItems.COPPER_GEAR);
+		}
+		if (input.is(AutoItems.GOLD_SHEET)) {
+			return new ItemStack(AutoItems.GOLD_GEAR);
+		}
+		return null;
+	}
+
+	/**
+	 * Planks cut into the fence, slab or stairs of the same wood that the filter shows: one fence or stair, or two slabs,
+	 * per plank. Woods are matched by name ({@code oak_planks} with {@code oak_fence}).
+	 */
+	private static @Nullable ItemStack woodworkFrom(ItemStack input, ItemStack filter) {
+		Identifier planks = BuiltInRegistries.ITEM.getKey(input.getItem());
+		Identifier wanted = BuiltInRegistries.ITEM.getKey(filter.getItem());
+		if (!input.is(ItemTags.PLANKS) || !planks.getNamespace().equals(wanted.getNamespace()) || !planks.getPath().endsWith("_planks")) {
+			return null;
+		}
+		String wood = planks.getPath().substring(0, planks.getPath().length() - "_planks".length());
+		String shape = wanted.getPath();
+		if (shape.equals(wood + "_fence") || shape.equals(wood + "_stairs")) {
+			return filter.copyWithCount(1);
+		}
+		if (shape.equals(wood + "_slab")) {
+			return filter.copyWithCount(2);
+		}
+		return null;
 	}
 
 	/** A log (or wood) cut into planks: half again as many as crafting gives. */

@@ -1,0 +1,54 @@
+{
+  "parent": "mioscoppergolems_automatisation:guide/operator",
+  "criteria": {
+    "copper_sheet": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "mioscoppergolems_automatisation:copper_sheet"
+          }
+        ]
+      }
+    },
+    "iron_sheet": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "mioscoppergolems_automatisation:iron_sheet"
+          }
+        ]
+      }
+    },
+    "gold_sheet": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "mioscoppergolems_automatisation:gold_sheet"
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "mioscoppergolems_automatisation:copper_sheet"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.sheets.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.sheets.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "copper_sheet",
+      "iron_sheet",
+      "gold_sheet"
+    ]
+  ]
+}

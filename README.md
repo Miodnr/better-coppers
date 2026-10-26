@@ -11,26 +11,30 @@ Everything is meant to feel vanilla: golems are slow, sometimes shake their head
 | Give the golem… | It becomes a… | What it does |
 |---|---|---|
 | a **bundle** | Sorter | Empties its copper chest and puts every item where it belongs |
-| a **pickaxe** + **mineshaft plan** | Miner | Digs a vanilla-style mineshaft, follows ores, brings the loot home |
-| a **hoe** | Farmer | Harvests and replants the fields around its chest |
-| an **axe** | Forester | Fells natural trees and replants them |
-| a **fishing rod** | Fisher | Fishes from the shore and brings the catch home |
+| a **copper pickaxe** + **mineshaft plan** | Miner | Digs a vanilla-style mineshaft, follows ores, brings the loot home |
+| a **copper hoe** | Farmer | Harvests and replants the fields around its chest |
+| a **copper axe** | Forester | Fells natural trees and replants them |
+| a **fishing rod** | Fisher | Casts its line from the shore and brings the catch home |
 | a **brush** | Animal keeper | Feeds animals so they breed |
 | a **crafting table** | Crafter | Crafts whatever the item frames on its chest show |
 | a **route** (two chests) | Courier | Carries everything from one chest to another, however far apart |
 
-A golem without any of these just wanders around, like in vanilla.
+Golems only work with **copper** tools. A golem without any of these just wanders around, like in vanilla. A golem with a home never strays more than 6 blocks from it when it has nothing to do.
 
 On top of the jobs:
-- **Copper Chest Minecart:** a golem can tow one on an iron chain to carry much more.
+- **Copper Chest Minecart:** a golem can tow one on an iron or copper chain to carry much more.
+- **Eyes:** a block of iron, gold or diamond gives a golem glowing eyes and 1.5×, 2× or 3× its work radius.
+- **Broken tools:** a golem whose tool breaks keeps its job and fetches a new copper tool from the chests around its home.
 - **Minecarts and boats:** golems ride them on long trips.
 - **Monsters and guards:** monsters hunt copper golems, iron golems guard them, and copper golems repair iron golems.
 - **Armour trims:** golems can wear them, just for looks.
-- **Running costs:** working golems need redstone energy, rust from work, and wear out their tools.
+- **Running costs:** working golems recharge on Charging Pads driven by a redstone clock, rust from work, and wear out their tools.
 
 ---
 
 ## Getting started
+
+**New to the mod?** You get a **Golem Handbook** the first time you join a world (lost it? book + copper ingot). It explains everything, chapter by chapter, in English and German. The **Mios Coppergolems advancement tab** (press L) is the quest line: each step tells you what to try next, from building your first golem to "Full Employment" with a golem in every job. The add-on brings its own handbook chapters and its own tab.
 
 1. **Give a golem its job item.** Right-click the golem with it (see the table above).
 2. **Give it a home.** Sneak + right-click the golem with an empty hand. It glows and tells you its job, home, energy and rust. Then right-click the **copper chest** it should belong to (within 32 blocks).
@@ -45,9 +49,10 @@ To move a golem to another chest, link it again.
 ### Sorter
 - Needs a **bundle**, which it keeps in its off hand. It only empties its own home chest.
 - It knows every container within 32 blocks (8 up/down) and where each item belongs:
-  1. a chest that already holds that item,
-  2. otherwise any barrel with room,
-  3. otherwise an empty chest.
+  1. a chest or barrel with an **item frame** showing that item (a framed container only takes what its frames show),
+  2. otherwise a chest that already holds that item,
+  3. otherwise any barrel with room,
+  4. otherwise an empty chest.
 - For character, it first opens 0–3 wrong chests on each trip and shakes its head.
 - It carries 16 items at a time, as in vanilla, or a whole cart load with a chained cart.
 - To take the bundle back, right-click the sorter with an empty hand while it carries nothing.
@@ -56,7 +61,7 @@ To move a golem to another chest, link it again.
 1. Make a **Survey Table** (2 paper / 2 copper ingots / 2 planks, stacked in that order).
 2. Put paper in, choose a length (8–128) and take out the **mineshaft plan**.
 3. Mark the entrance by using the plan on the ground (or on a wall). The tunnel heads the way you look.
-4. Give the golem any **pickaxe** and the plan, then link it to a copper chest near the entrance.
+4. Give the golem a **copper pickaxe** and the plan, then link it to a copper chest near the entrance.
 
 The golem digs a **3×3 vanilla-style mineshaft**: plank floor over gaps, a support every 4 blocks (fence posts and a plank beam), torches on the beams, and rails laid at the end.
 
@@ -65,10 +70,11 @@ The golem digs a **3×3 vanilla-style mineshaft**: plank floor over gaps, a supp
 - **Safety:** it plugs water and lava with cobblestone and clears gravel and sand that falls in.
 - **Slow and clumsy:** it digs at about half a player's speed and skips blocks it can't reach.
 - **Loot:** it carries 64 items (more with a cart), then walks home. Link a sorter to the same chest and it sorts the loot, leaving the mining supplies alone.
+- **Diamonds:** when it finds diamonds, it digs out the whole vein and hurries home with its antenna blinking.
 - **Getting things back:** right-click with an empty hand to get the pickaxe and the plan back. The plan keeps its progress.
 
 ### Farmer
-- Give it a **hoe**. Its field is everything within 8 blocks of its home chest.
+- Give it a **copper hoe**. Its field is everything within 8 blocks of its home chest.
 - It harvests ripe wheat, carrots, potatoes, beetroot and nether wart and replants them right away. Empty farmland gets what the neighbouring rows grow.
 - It picks pumpkins and melons and leaves the stems, and cuts sugar cane and bamboo once they are 3 high.
 - It keeps 16 of every seed for replanting and never tills new land. You build the field.
@@ -78,7 +84,7 @@ The golem digs a **3×3 vanilla-style mineshaft**: plank floor over gaps, a supp
 | Tool | Job | What it does |
 |---|---|---|
 | Axe | Forester | Fells natural trees within 12 blocks (never logs you placed), collects saplings, apples and sticks, replants every stump |
-| Fishing rod | Fisher | Fishes open water within 10 blocks, a catch every 20–50 seconds (fish and junk, no treasure) |
+| Fishing rod | Fisher | Casts a float into open water within 10 blocks and reels in when it dips, a catch every 20–50 seconds (fish and junk, no treasure) |
 | Brush | Animal keeper | Feeds pairs of animals with food from its chest so they breed, up to 16 per kind |
 | Crafting table | Crafter | Crafts what item frames on or next to its chest show, from ingredients in that chest |
 
@@ -94,9 +100,9 @@ The courier takes 16 items at a time, or a whole cart load with a chained cart. 
 
 ## Getting around
 
-### Copper Chest Minecart on an iron chain
+### Copper Chest Minecart on a chain
 - **Recipe:** minecart + any copper chest.
-- **Hand it over:** right-click the cart with an **iron chain** so it follows you, then right-click a golem.
+- **Hand it over:** right-click the cart with an **iron or copper chain** (any age, waxed or not) so it follows you, then right-click a golem.
 - **Unchain it:** sneak + right-click the cart.
 - **Sorters** load everything *related* to the first item they pick up: stone also brings stone slabs, stairs and bricks, but not oak logs. They then deliver it all in one trip.
 - **Other jobs** fill the cart before their pouch.
@@ -120,6 +126,25 @@ So keep some iron in your chests, and build an iron golem for every work site.
 
 ---
 
+## Tools and eyes
+
+**Copper tools only.** Golems work with copper pickaxes, axes and hoes. Other pickaxes, axes and hoes are refused (any axe still scrapes a rusty golem). Fishing rods, brushes and crafting tables have no copper version and work as before.
+
+**Broken tools.** When a tool breaks, the golem keeps its job. It brings home what it carries, then looks for the same tool in its home chest and then in every chest and barrel within 16 blocks of home, and takes it. With none anywhere it shakes its head and looks again every half minute. To end its job instead, right-click it with an empty hand.
+
+**Eyes.** Right-click a golem with a block of iron, gold or diamond:
+
+| Block | Eyes | Radius | Farm | Forest | Fishing | Sorter |
+|---|---|---|---|---|---|---|
+| none | warm yellow | 1× | 8 | 12 | 10 | 32 |
+| Iron block | white | 1.5× | 12 | 18 | 15 | 48 |
+| Gold block | gold | 2× | 16 | 24 | 20 | 64 |
+| Diamond block | cyan | 3× | 24 | 36 | 30 | 96 |
+
+It also widens animal pens, how far a miner follows a vein and where an add-on operator looks for spare parts. Couriers don't take eyes. A new block replaces the old one (which you get back), and the block drops when the golem dies.
+
+---
+
 ## Armour trims
 Right-click a golem with an **armour trim smithing template**, then with a **trim material** (iron, gold, copper, emerald, amethyst…). The trim shows in the material's colour, exactly like on armour, and all 18 vanilla patterns are supported.
 - The material is used up. The template stays with the golem.
@@ -133,7 +158,8 @@ Trims are only for looks.
 ## Running costs
 Sorters and couriers are free. Every other job costs something:
 
-- **Energy:** work uses energy. At night, or when empty, the golem stands on a **redstone-powered block** near its home to recharge. A block of redstone works, and so does any block powered by a lever, torch or dust. Build one pad per golem.
+- **Energy:** work uses energy. At night, or when empty, the golem walks to a free **Charging Pad** near its home (3 copper ingots, a lightning rod and redstone: `CLC` / `CRC`) and stands on it. A steady redstone signal does nothing: the pad charges on **redstone pulses**, so give it a **redstone clock**. Each pulse gives 8 energy (of 1000). Pulses less than 4 ticks apart count once, so the fastest clock fills an empty golem in about 25 seconds and a once-a-second clock in about two minutes. Build one pad per golem.
+- **Sleeping:** when the players sleep through the night, every working golem with a free pad near its home wakes up fully charged, as if it had spent the night on the pad.
 - **Rust:** steady work makes golems rust one stage every few days. Exposed golems work at 85 % speed and weathered ones at 70 %. Fully oxidized or waxed golems don't work at all.
 - **Scraping:** use an axe by hand, or put an **axe in a dispenser**: each redstone pulse scrapes the golem in front of it by one stage.
 - **Tools** wear out and break.
@@ -148,17 +174,18 @@ Sorters and couriers are free. Every other job costs something:
 | Sneak + right-click golem (empty hand) | Shows its status and starts linking |
 | …then right-click a copper chest | Sets its home |
 | …then right-click a chest/barrel, then another | Sets a courier route |
-| Right-click golem (empty hand) | Takes its tool or bundle back |
+| Right-click golem (empty hand) | Takes its tool or bundle back (or ends the job of a golem whose tool broke) |
+| Right-click golem with an iron, gold or diamond block | Eye upgrade: bigger work radius |
 | Right-click golem with template, then material | Gives it an armour trim |
 | Right-click golem with shears | Removes the trim |
-| Right-click cart with iron chain, then a golem | Hands the cart over |
+| Right-click cart with an iron or copper chain, then a golem | Hands the cart over |
 | Sneak (just hold it) | Shows lines from golems to their homes |
 
 ---
 
 ## Add-on: Mios Coppergolems Automatisation
 
-The [`automatisation/`](automatisation/README.md) folder holds an add-on with **conveyor belts, funnels, chutes, presses, saws and grabber arms**, in the spirit of Create but more mechanical. There is no power network: every machine has a crank that a copper golem with a **Copper Wrench** has to turn. See its [README](automatisation/README.md).
+The [`automatisation/`](automatisation/README.md) folder holds an add-on with **conveyor belts, funnels, chutes, presses, saws, grabber arms and a golem assembler**, in the spirit of Create but more mechanical. There is no power network: every machine has a crank that a copper golem with a **Copper Wrench** has to turn, and repairs when it jams. What the factory makes goes back into the colony: armour plating, rust coating and faster gearwork for golems, satchels and double carts for bigger loads, cheap rails and fences for miners, a faster charging station, and new golems. See its [README](automatisation/README.md).
 
 ---
 
@@ -193,7 +220,9 @@ src/main/java/dev/mioscoppergolems/
   api/       hooks for add-ons: jobs, brain behaviours, link targets
   mixin/     swaps in the new golem AI, goal accessors
 src/client/java/dev/mioscoppergolems/client/
-  render/    cart renderer with the iron chain, GolemTrimLayer
+  render/    cart renderer with its chain, GolemTrimLayer, GolemAntennaLayer, GolemBobberRenderer
 automatisation/  the Automatisation add-on (its own Gradle subproject)
-tools/       TrimGen.java (golem trim textures from the vanilla armour trims), SurveyGen.java (Survey Table textures)
+tools/       TrimGen.java (golem trim textures from the vanilla armour trims), SurveyGen.java (Survey Table textures),
+             PadGen.java (Charging Pad), HandbookGen.java (handbook icon), GolemEyesGen.java (eye and antenna glow),
+             gen_guide.py (advancements and handbook texts of both mods)
 ```

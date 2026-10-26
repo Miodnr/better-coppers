@@ -1,0 +1,37 @@
+{
+  "parent": "mioscoppergolems:guide/home",
+  "criteria": {
+    "forester": {
+      "trigger": "minecraft:impossible"
+    },
+    "fisher": {
+      "trigger": "minecraft:impossible"
+    },
+    "keeper": {
+      "trigger": "minecraft:impossible"
+    },
+    "crafter": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:copper_axe"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems.guide.odd_jobs.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems.guide.odd_jobs.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "forester",
+      "fisher",
+      "keeper",
+      "crafter"
+    ]
+  ]
+}

@@ -1,13 +1,18 @@
 package dev.mioscoppergolems.automatisation.golem;
 
 import com.google.common.collect.ImmutableMap;
+import dev.mioscoppergolems.api.MiosCoppergolemsApi;
+import dev.mioscoppergolems.automatisation.Automatisation;
 import dev.mioscoppergolems.automatisation.machine.MachineBlockEntity;
+import dev.mioscoppergolems.automatisation.registry.AutoAttachments;
+import dev.mioscoppergolems.golem.Inventories;
 import dev.mioscoppergolems.golem.TravelWatch;
 import dev.mioscoppergolems.upkeep.Upkeep;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.behavior.BlockPosTracker;
@@ -15,11 +20,19 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.animal.golem.CopperGolem;
 import net.minecraft.world.entity.animal.golem.CopperGolemState;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.HopperBlockEntity;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An operator walks to its machine and turns the crank for as long as the machine has work, reaching out every couple
  * of seconds like it does at a chest. With nothing to do it potters about nearby. Slow when rusty, idle at night.
+ * <p>
+ * When the machine jams, the operator fetches the spare part it needs (see {@link MachineBlockEntity#repairItem()})
+ * from a chest or barrel within {@link #SUPPLY_RANGE} blocks of the machine (more with an eye upgrade) and repairs it. Without one, it waits.
  */
 public class OperatorBehavior extends Behavior<CopperGolem> {
 	private static final double REACH = 2.2;
@@ -30,9 +43,13 @@ public class OperatorBehavior extends Behavior<CopperGolem> {
 	/** One energy every second of cranking: a full charge lasts most of a day. */
 	private static final int ENERGY_INTERVAL = 20;
 	private static final int REACH_ANIMATION_INTERVAL = 40;
+	private static final int SUPPLY_RANGE = 8;
+	private static final int REPAIR_TICKS = 40;
+	private static final int NO_PARTS_COOLDOWN = 100;
 
 	private final TravelWatch travel = new TravelWatch();
 	private int crankTicks;
+	private int repairTicks;
 
 	public OperatorBehavior() {
 		super(ImmutableMap.of(MemoryModuleType.TRANSPORT_ITEMS_COOLDOWN_TICKS, MemoryStatus.VALUE_ABSENT, MemoryModuleType.IS_PANICKING, MemoryStatus.VALUE_ABSENT));
@@ -79,6 +96,12 @@ public class OperatorBehavior extends Behavior<CopperGolem> {
 		double distance = horizontalDistance(golem.position(), center);
 		boolean inReach = distance <= REACH && Math.abs(golem.getY() - pos.getY()) <= 2.5;
 
+		if (machine.isBroken()) {
+			this.tickRepair(level, golem, pos, machine, inReach);
+			return;
+		}
+		this.repairTicks = 0;
+
 		if (!machine.wantsWork(level)) {
 			if (distance > STAY_NEAR) {
 				BehaviorUtils.setWalkAndLookTargetMemories(golem, pos, 0.8F * Upkeep.speed(golem), 2);
@@ -114,6 +137,105 @@ public class OperatorBehavior extends Behavior<CopperGolem> {
 		if (this.crankTicks % ENERGY_INTERVAL == 0) {
 			Upkeep.spend(golem, 1);
 		}
+	}
+
+	// --- repairs ---
+
+	private void tickRepair(ServerLevel level, CopperGolem golem, BlockPos pos, MachineBlockEntity machine, boolean inReach) {
+		ItemStack part = carried(golem);
+		if (!part.isEmpty() && !part.is(machine.repairItem())) {
+			// Fetched for another machine: put it down and get the right one.
+			golem.spawnAtLocation(level, part);
+			golem.removeAttached(AutoAttachments.CARRIED_PART);
+			part = ItemStack.EMPTY;
+		}
+		if (part.isEmpty()) {
+			this.fetchPart(level, golem, pos, machine.repairItem());
+			return;
+		}
+		if (!inReach) {
+			this.walk(golem, Vec3.atCenterOf(pos), pos);
+			return;
+		}
+		stopAndLook(golem, pos);
+		if (++this.repairTicks % 10 == 1) {
+			golem.setState(this.repairTicks % 20 == 1 ? CopperGolemState.DROPPING_ITEM : CopperGolemState.IDLE);
+			level.playSound(null, pos, SoundEvents.ANVIL_HIT, SoundSource.BLOCKS, 0.25F, 1.6F);
+		}
+		if (this.repairTicks >= REPAIR_TICKS) {
+			this.repairTicks = 0;
+			golem.removeAttached(AutoAttachments.CARRIED_PART);
+			golem.setState(CopperGolemState.IDLE);
+			machine.repair(level);
+			MiosCoppergolemsApi.awardGuideNearby(level, Vec3.atCenterOf(pos), Automatisation.id("guide/repair"));
+		}
+	}
+
+	private void fetchPart(ServerLevel level, CopperGolem golem, BlockPos machine, Item wanted) {
+		BlockPos supply = findSupply(level, machine, wanted, MiosCoppergolemsApi.radius(golem, SUPPLY_RANGE));
+		if (supply == null) {
+			this.rest(golem, NO_PARTS_COOLDOWN);
+			return;
+		}
+		if (!new AABB(supply).inflate(1.0, 1.5, 1.0).intersects(golem.getBoundingBox())) {
+			this.walk(golem, Vec3.atCenterOf(supply), supply);
+			return;
+		}
+		stopAndLook(golem, supply);
+		Container container = HopperBlockEntity.getContainerAt(level, supply);
+		if (container == null) {
+			return;
+		}
+		for (int slot = 0; slot < container.getContainerSize(); slot++) {
+			if (container.getItem(slot).is(wanted)) {
+				golem.setAttached(AutoAttachments.CARRIED_PART, container.removeItem(slot, 1));
+				container.setChanged();
+				golem.setState(CopperGolemState.GETTING_ITEM);
+				golem.playSound(SoundEvents.COPPER_GOLEM_ITEM_GET);
+				this.travel.reset();
+				return;
+			}
+		}
+	}
+
+	/** The nearest container around the machine that has the part. */
+	private static @Nullable BlockPos findSupply(ServerLevel level, BlockPos machine, Item wanted, int range) {
+		BlockPos best = null;
+		double bestDistance = Double.MAX_VALUE;
+		for (BlockPos mutable : BlockPos.betweenClosed(machine.offset(-range, -3, -range), machine.offset(range, 3, range))) {
+			if (!(level.getBlockEntity(mutable) instanceof Container)) {
+				continue;
+			}
+			Container container = HopperBlockEntity.getContainerAt(level, mutable);
+			if (container == null || !Inventories.contains(container, stack -> stack.is(wanted))) {
+				continue;
+			}
+			double distance = mutable.distSqr(machine);
+			if (distance < bestDistance) {
+				best = mutable.immutable();
+				bestDistance = distance;
+			}
+		}
+		return best;
+	}
+
+	private static ItemStack carried(CopperGolem golem) {
+		ItemStack part = golem.getAttached(AutoAttachments.CARRIED_PART);
+		return part == null ? ItemStack.EMPTY : part;
+	}
+
+	private void walk(CopperGolem golem, Vec3 goal, BlockPos target) {
+		if (this.travel.tick(golem, goal) > MAX_STALL_TICKS) {
+			this.rest(golem, UNREACHABLE_COOLDOWN);
+			return;
+		}
+		BehaviorUtils.setWalkAndLookTargetMemories(golem, target, 0.8F * Upkeep.speed(golem), 1);
+	}
+
+	private static void stopAndLook(CopperGolem golem, BlockPos pos) {
+		golem.getNavigation().stop();
+		golem.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
+		golem.getBrain().setMemory(MemoryModuleType.LOOK_TARGET, new BlockPosTracker(pos));
 	}
 
 	private void rest(CopperGolem golem, int ticks) {

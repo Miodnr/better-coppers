@@ -2,6 +2,8 @@ package dev.mioscoppergolems.automatisation.golem;
 
 import dev.mioscoppergolems.api.GolemJob;
 import dev.mioscoppergolems.api.GolemLinkTarget;
+import dev.mioscoppergolems.api.MiosCoppergolemsApi;
+import dev.mioscoppergolems.automatisation.Automatisation;
 import dev.mioscoppergolems.automatisation.item.WrenchItem;
 import dev.mioscoppergolems.automatisation.machine.MachineBlock;
 import dev.mioscoppergolems.automatisation.registry.AutoAttachments;
@@ -49,6 +51,14 @@ public final class Operators {
 		public @Nullable BlockPos workplace(CopperGolem golem) {
 			return machine(golem);
 		}
+
+		@Override
+		public void dropItems(ServerLevel level, CopperGolem golem) {
+			ItemStack part = golem.removeAttached(AutoAttachments.CARRIED_PART);
+			if (part != null) {
+				golem.spawnAtLocation(level, part);
+			}
+		}
 	};
 
 	public static final GolemLinkTarget LINK = new GolemLinkTarget() {
@@ -71,6 +81,7 @@ public final class Operators {
 			level.playSound(null, pos, SoundEvents.COPPER_GOLEM_ITEM_DROP, SoundSource.NEUTRAL, 1.0F, 1.2F);
 			HomeDisplay.drawLine(level, golem, pos, null);
 			player.sendOverlayMessage(Component.translatable("message.mioscoppergolems_automatisation.operator_linked", level.getBlockState(pos).getBlock().getName()));
+			MiosCoppergolemsApi.awardGuide(player, Automatisation.id("guide/operator"));
 			return InteractionResult.SUCCESS;
 		}
 	};

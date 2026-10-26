@@ -4,9 +4,11 @@ import dev.mioscoppergolems.combat.GolemGuards;
 import dev.mioscoppergolems.courier.Couriers;
 import dev.mioscoppergolems.farming.FarmerInteractions;
 import dev.mioscoppergolems.golem.CartChaining;
+import dev.mioscoppergolems.golem.Eyes;
 import dev.mioscoppergolems.golem.Sorter;
 import dev.mioscoppergolems.home.HomeDisplay;
 import dev.mioscoppergolems.home.HomeLinking;
+import dev.mioscoppergolems.job.Tools;
 import dev.mioscoppergolems.job.WorkerInteractions;
 import dev.mioscoppergolems.mining.MinerInteractions;
 import dev.mioscoppergolems.registry.ModAttachments;
@@ -24,8 +26,8 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
-import net.minecraft.world.entity.animal.golem.CopperGolem;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.animal.golem.CopperGolem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +48,9 @@ public class MiosCoppergolems implements ModInitializer {
 		ModItems.init();
 		ModMenus.init();
 		Couriers.init();
+		// First, so non-copper tools are refused before any job takes them.
+		UseEntityCallback.EVENT.register(Tools::onUseEntity);
+		UseEntityCallback.EVENT.register(Eyes::onUseEntity);
 		UseEntityCallback.EVENT.register(HomeLinking::onUseEntity);
 		UseEntityCallback.EVENT.register(GolemTrims::onUseEntity);
 		UseEntityCallback.EVENT.register(MinerInteractions::onUseEntity);

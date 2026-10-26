@@ -1,7 +1,10 @@
 package dev.mioscoppergolems.automatisation.item;
 
+import dev.mioscoppergolems.api.MiosCoppergolemsApi;
+import dev.mioscoppergolems.automatisation.Automatisation;
 import dev.mioscoppergolems.automatisation.arm.GrabberArmBlockEntity;
 import dev.mioscoppergolems.automatisation.funnel.FunnelBlock;
+import dev.mioscoppergolems.automatisation.machine.MachineBlockEntity;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -14,6 +17,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -52,6 +56,17 @@ public class WrenchItem extends Item {
 			}
 			return InteractionResult.SUCCESS;
 		}
+		if (player.isSecondaryUseActive() && level.getBlockEntity(pos) instanceof MachineBlockEntity machine) {
+			// Sneak + wrench: how worn the machine is.
+			if (!level.isClientSide()) {
+				player.sendOverlayMessage(Component.translatable(
+					machine.isBroken() ? "message.mioscoppergolems_automatisation.machine_broken" : "message.mioscoppergolems_automatisation.machine_wear",
+					machine.wearPercent(),
+					new ItemStack(machine.repairItem()).getHoverName()
+				));
+			}
+			return InteractionResult.SUCCESS;
+		}
 		if (!(level instanceof ServerLevel serverLevel)) {
 			return level.getBlockEntity(pos) instanceof GrabberArmBlockEntity || MARKING.containsKey(player.getUUID()) ? InteractionResult.SUCCESS : InteractionResult.PASS;
 		}
@@ -60,6 +75,9 @@ public class WrenchItem extends Item {
 				MARKING.remove(player.getUUID());
 				long inputs = arm.spots().stream().filter(GrabberArmBlockEntity.Spot::input).count();
 				player.sendOverlayMessage(Component.translatable("message.mioscoppergolems_automatisation.arm_done", inputs, arm.spots().size() - inputs));
+				if (inputs > 0 && arm.spots().size() > inputs) {
+					MiosCoppergolemsApi.awardGuide(player, Automatisation.id("guide/arm"));
+				}
 			} else {
 				MARKING.put(player.getUUID(), pos.immutable());
 				player.sendOverlayMessage(Component.translatable("message.mioscoppergolems_automatisation.arm_marking", GrabberArmBlockEntity.RANGE));

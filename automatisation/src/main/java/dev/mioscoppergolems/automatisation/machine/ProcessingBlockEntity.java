@@ -86,6 +86,7 @@ public abstract class ProcessingBlockEntity extends MachineBlockEntity {
 		}
 		if (this.progress >= this.cycleTicks()) {
 			this.finish(level, item);
+			this.addWear(level, 1);
 		}
 	}
 

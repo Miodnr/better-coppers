@@ -1,0 +1,25 @@
+{
+  "parent": "mioscoppergolems:guide/courier",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:compass"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems.guide.long_haul.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems.guide.long_haul.description"
+    },
+    "frame": "goal"
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

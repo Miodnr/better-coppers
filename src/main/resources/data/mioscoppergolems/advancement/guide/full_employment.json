@@ -1,0 +1,67 @@
+{
+  "parent": "mioscoppergolems:guide/odd_jobs",
+  "criteria": {
+    "sorter": {
+      "trigger": "minecraft:impossible"
+    },
+    "miner": {
+      "trigger": "minecraft:impossible"
+    },
+    "farmer": {
+      "trigger": "minecraft:impossible"
+    },
+    "forester": {
+      "trigger": "minecraft:impossible"
+    },
+    "fisher": {
+      "trigger": "minecraft:impossible"
+    },
+    "keeper": {
+      "trigger": "minecraft:impossible"
+    },
+    "crafter": {
+      "trigger": "minecraft:impossible"
+    },
+    "courier": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:bell"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems.guide.full_employment.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems.guide.full_employment.description"
+    },
+    "frame": "challenge"
+  },
+  "requirements": [
+    [
+      "sorter"
+    ],
+    [
+      "miner"
+    ],
+    [
+      "farmer"
+    ],
+    [
+      "forester"
+    ],
+    [
+      "fisher"
+    ],
+    [
+      "keeper"
+    ],
+    [
+      "crafter"
+    ],
+    [
+      "courier"
+    ]
+  ]
+}

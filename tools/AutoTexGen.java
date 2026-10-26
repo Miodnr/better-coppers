@@ -37,9 +37,19 @@ public class AutoTexGen {
 		ImageIO.write(sheet(COPPER), "png", new File(out, "item/copper_sheet.png"));
 		ImageIO.write(sheet(IRON), "png", new File(out, "item/iron_sheet.png"));
 		ImageIO.write(sheet(GOLD), "png", new File(out, "item/gold_sheet.png"));
+		ImageIO.write(gear(COPPER, 8.0, 8.0, 1.0), "png", new File(out, "item/copper_gear.png"));
+		ImageIO.write(gear(GOLD, 8.0, 8.0, 1.0), "png", new File(out, "item/gold_gear.png"));
+		ImageIO.write(plating(), "png", new File(out, "item/iron_plating.png"));
+		ImageIO.write(coating(), "png", new File(out, "item/copper_coating.png"));
+		ImageIO.write(gearwork(), "png", new File(out, "item/gold_gearwork.png"));
+		ImageIO.write(satchel(), "png", new File(out, "item/copper_satchel.png"));
+		ImageIO.write(cartExtension(), "png", new File(out, "item/cart_extension.png"));
 
 		int s = 10;
-		BufferedImage[] all = {belt(0), beltSide(), funnel(cutCopper, false), funnel(cutCopper, true), wrench(), sheet(COPPER), sheet(IRON), sheet(GOLD)};
+		BufferedImage[] all = {
+			wrench(), sheet(COPPER), sheet(IRON), sheet(GOLD), gear(COPPER, 8.0, 8.0, 1.0), gear(GOLD, 8.0, 8.0, 1.0), plating(), coating(), gearwork(),
+			satchel(), cartExtension()
+		};
 		BufferedImage preview = new BufferedImage(all.length * (16 * s + 8), 16 * s, BufferedImage.TYPE_INT_ARGB);
 		var g = preview.createGraphics();
 		g.setColor(new java.awt.Color(0x3a3a3a));
@@ -176,6 +186,161 @@ public class AutoTexGen {
 		}
 		for (int x = 2; x <= 13; x++) {
 			set(image, x, 12, palette[4]);
+		}
+		return image;
+	}
+
+	/** A gear: toothed ring around a hole, lit from the top left. {@code scale} 1 fills the item. */
+	static BufferedImage gear(int[] palette, double cx, double cy, double scale) {
+		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+		drawGear(image, palette, cx, cy, scale);
+		return image;
+	}
+
+	static void drawGear(BufferedImage image, int[] palette, double cx, double cy, double scale) {
+		for (int y = 0; y < 16; y++) {
+			for (int x = 0; x < 16; x++) {
+				double dx = x + 0.5 - cx;
+				double dy = y + 0.5 - cy;
+				double r = Math.sqrt(dx * dx + dy * dy) / scale;
+				double angle = Math.atan2(dy, dx);
+				boolean tooth = Math.cos(angle * 8) > 0.25;
+				boolean solid = r >= 1.6 && (r <= 4.9 || tooth && r <= 6.9);
+				if (!solid) {
+					continue;
+				}
+				int shade;
+				if (r < 2.5) {
+					shade = palette[3];
+				} else if (dx + dy < -2.5) {
+					shade = palette[0];
+				} else if (dx + dy > 3.0) {
+					shade = palette[3];
+				} else {
+					shade = palette[r > 5.0 ? 2 : 1];
+				}
+				set(image, x, y, shade);
+			}
+		}
+	}
+
+	/** A curved iron plate with rivets. */
+	static BufferedImage plating() {
+		String[] rows = {
+			"................",
+			"................",
+			"...bbbbbbbbbb...",
+			"..baaaaaaaaaab..",
+			"..bacbbbbbbcab..",
+			"..babbbbbbbbbc..",
+			"..babbbbbbbbbc..",
+			"..babbbbbbbbbc..",
+			"..babbbbbbbbbc..",
+			"..babbbbbbbbbc..",
+			"...bcbbbbbbcbc..",
+			"...bbbbbbbbbc...",
+			"....cbbbbbbc....",
+			".....cccccc.....",
+			"................",
+			"................",
+		};
+		return paint(rows, IRON);
+	}
+
+	/** A small tin of copper coating with a bright label band. */
+	static BufferedImage coating() {
+		String[] rows = {
+			"................",
+			"................",
+			"................",
+			".....cccccc.....",
+			"....caaaaaac....",
+			"....cbbbbbbc....",
+			"....baaaaaab....",
+			"....bbbbbbbc....",
+			"....baaaaaac....",
+			"....baaaaaac....",
+			"....bbbbbbbc....",
+			"....bbbbbbbc....",
+			"....bbbbbbbc....",
+			".....cccccc.....",
+			"................",
+			"................",
+		};
+		BufferedImage image = paint(rows, COPPER);
+		// The label: two light rows.
+		for (int x = 5; x <= 10; x++) {
+			set(image, x, 8, 0xEFE6C8);
+			set(image, x, 9, 0xD9CFAE);
+		}
+		return image;
+	}
+
+	/** A big gold gear with a small copper one meshing at the bottom right. */
+	static BufferedImage gearwork() {
+		BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+		drawGear(image, GOLD, 6.5, 6.5, 0.85);
+		drawGear(image, COPPER, 11.5, 11.5, 0.55);
+		return image;
+	}
+
+	/** A leather satchel with a copper buckle. */
+	static BufferedImage satchel() {
+		int[] leather = {0xC08A55, 0x9A6A3C, 0x7A5230, 0x5A3A20, 0x3A2412};
+		String[] rows = {
+			"................",
+			"................",
+			".....cccccc.....",
+			"....c......c....",
+			"...bbbbbbbbbb...",
+			"..baaaaaaaaaab..",
+			"..bbbbbbbbbbbc..",
+			"..bbbbb##bbbbc..",
+			"..bbbbb##bbbbc..",
+			"..abbbbbbbbbbc..",
+			"..abbbbbbbbbbc..",
+			"..abbbbbbbbbbc..",
+			"..abbbbbbbbbbc..",
+			"...cccccccccc...",
+			"................",
+			"................",
+		};
+		BufferedImage image = paint(rows, leather);
+		for (int y = 0; y < 16; y++) {
+			for (int x = 0; x < 16; x++) {
+				if (rows[y].charAt(x) == '#') {
+					set(image, x, y, (x + y) % 2 == 0 ? COPPER[0] : COPPER[1]);
+				}
+			}
+		}
+		return image;
+	}
+
+	/** A copper chest lid with a plus: the half that makes a cart a double chest. */
+	static BufferedImage cartExtension() {
+		String[] rows = {
+			"................",
+			"................",
+			"................",
+			"..cccccccccccc..",
+			"..caaaaaaaaaac..",
+			"..cabbbbbbbbbc..",
+			"..cbbbbbbbbbbc..",
+			"..cccccccccccc..",
+			"..cbbbbccbbbbc..",
+			"..cbbbbccbbbbc..",
+			"..cbbbbbbbbbbc..",
+			"..cbbbbbbbbbbc..",
+			"..cccccccccccc..",
+			"................",
+			"................",
+			"................",
+		};
+		BufferedImage image = paint(rows, COPPER);
+		int plus = 0x7FD8E8;
+		for (int i = 0; i < 5; i++) {
+			set(image, 11 + i - 2, 13, plus);
+			set(image, 11, 11 + i, plus);
 		}
 		return image;
 	}

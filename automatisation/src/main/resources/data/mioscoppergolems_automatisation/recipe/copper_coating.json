@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "mioscoppergolems_automatisation:copper_sheet",
+    "mioscoppergolems_automatisation:copper_sheet",
+    "mioscoppergolems_automatisation:copper_sheet",
+    "minecraft:honeycomb"
+  ],
+  "result": {
+    "id": "mioscoppergolems_automatisation:copper_coating",
+    "count": 1
+  }
+}

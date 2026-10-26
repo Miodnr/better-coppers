@@ -1,0 +1,25 @@
+{
+  "parent": "mioscoppergolems_automatisation:guide/gears",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "mioscoppergolems_automatisation:golem_assembler"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.assembler.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.assembler.description"
+    },
+    "frame": "goal"
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

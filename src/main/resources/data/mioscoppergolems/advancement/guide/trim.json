@@ -1,0 +1,25 @@
+{
+  "parent": "mioscoppergolems:guide/build_golem",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:coast_armor_trim_smithing_template"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems.guide.trim.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems.guide.trim.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

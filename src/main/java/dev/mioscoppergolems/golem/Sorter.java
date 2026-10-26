@@ -1,5 +1,6 @@
 package dev.mioscoppergolems.golem;
 
+import dev.mioscoppergolems.guide.Guide;
 import dev.mioscoppergolems.home.Homes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -38,6 +39,7 @@ public final class Sorter {
 				golem.setGuaranteedDrop(EquipmentSlot.OFFHAND);
 				held.consume(1, player);
 				golem.playSound(SoundEvents.BUNDLE_INSERT);
+				Guide.job(player, "sorter");
 				player.sendOverlayMessage(
 					Component.translatable(Homes.get(golem) == null ? "message.mioscoppergolems.sorter_needs_home" : "message.mioscoppergolems.sorter_ready")
 				);

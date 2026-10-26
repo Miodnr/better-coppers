@@ -2,6 +2,7 @@ package dev.mioscoppergolems.job;
 
 import dev.mioscoppergolems.entity.CopperChestMinecart;
 import dev.mioscoppergolems.golem.CartChaining;
+import dev.mioscoppergolems.golem.Eyes;
 import dev.mioscoppergolems.golem.Inventories;
 import dev.mioscoppergolems.upkeep.Upkeep;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class KeeperBehavior extends JobBehavior<KeeperBehavior.Feeding> {
 
 	@Override
 	protected @Nullable Feeding chooseTask(ServerLevel level, CopperGolem golem, WorkerData data, BlockPos home) {
-		List<Animal> animals = level.getEntitiesOfClass(Animal.class, new AABB(home).inflate(RADIUS, 4, RADIUS), Animal::isAlive);
+		List<Animal> animals = level.getEntitiesOfClass(Animal.class, new AABB(home).inflate(Eyes.radius(golem, RADIUS), 4, Eyes.radius(golem, RADIUS)), Animal::isAlive);
 		Map<EntityType<?>, List<Animal>> herds = new HashMap<>();
 		for (Animal animal : animals) {
 			herds.computeIfAbsent(animal.getType(), type -> new ArrayList<>()).add(animal);
@@ -100,7 +101,7 @@ public class KeeperBehavior extends JobBehavior<KeeperBehavior.Feeding> {
 		if (!food.isEmpty()) {
 			animal.setInLove(null);
 			level.sendParticles(ParticleTypes.HEART, animal.getX(), animal.getY() + animal.getBbHeight(), animal.getZ(), 3, 0.3, 0.2, 0.3, 0.0);
-			golem.getMainHandItem().hurtAndBreak(1, golem, EquipmentSlot.MAINHAND);
+			Tools.wear(golem, golem.getMainHandItem());
 			Upkeep.spend(golem, ENERGY_PER_FEED);
 		}
 		return true;
@@ -146,7 +147,7 @@ public class KeeperBehavior extends JobBehavior<KeeperBehavior.Feeding> {
 	@Override
 	protected void restock(ServerLevel level, CopperGolem golem, WorkerData data, Container chest) {
 		BlockPos home = golem.blockPosition();
-		List<Animal> animals = level.getEntitiesOfClass(Animal.class, new AABB(home).inflate(RADIUS + 4, 4, RADIUS + 4), Animal::isAlive);
+		List<Animal> animals = level.getEntitiesOfClass(Animal.class, new AABB(home).inflate(Eyes.radius(golem, RADIUS) + 4, 4, Eyes.radius(golem, RADIUS) + 4), Animal::isAlive);
 		for (int slot = 0; slot < chest.getContainerSize(); slot++) {
 			ItemStack stack = chest.getItem(slot);
 			if (stack.isEmpty() || animals.stream().noneMatch(animal -> animal.isFood(stack))) {

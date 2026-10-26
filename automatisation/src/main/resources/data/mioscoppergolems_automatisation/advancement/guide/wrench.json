@@ -1,0 +1,32 @@
+{
+  "parent": "mioscoppergolems_automatisation:guide/root",
+  "criteria": {
+    "copper_wrench": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "mioscoppergolems_automatisation:copper_wrench"
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "mioscoppergolems_automatisation:copper_wrench"
+    },
+    "title": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.wrench.title"
+    },
+    "description": {
+      "translate": "advancements.mioscoppergolems_automatisation.guide.wrench.description"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "copper_wrench"
+    ]
+  ]
+}
