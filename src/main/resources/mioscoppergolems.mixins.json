@@ -1,0 +1,15 @@
+{
+	"required": true,
+	"package": "dev.mioscoppergolems.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"CopperGolemAccessor",
+		"CopperGolemAiMixin",
+		"CopperGolemMixin",
+		"MobAccessor",
+		"NearestAttackableTargetGoalAccessor"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

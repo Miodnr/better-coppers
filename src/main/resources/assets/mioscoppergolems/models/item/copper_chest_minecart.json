@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "mioscoppergolems:item/copper_chest_minecart"
+  }
+}

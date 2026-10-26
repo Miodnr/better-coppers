@@ -1,24 +1,24 @@
 {
 	"schemaVersion": 1,
-	"id": "bettercoppers",
+	"id": "mioscoppergolems",
 	"version": "${version}",
-	"name": "Better Coppers",
-	"description": "Smarter Copper Golems: they know where items belong and can tow a copper chest minecart on an iron chain.",
-	"authors": [],
+	"name": "Mios Coppergolems",
+	"description": "Copper golems that do real work: jobs, homes, couriers, minecart and boat rides, armour trims, and iron golems to keep them safe.",
+	"authors": ["Miodnr"],
 	"license": "All-Rights-Reserved",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"dev.bettercoppers.BetterCoppers"
+			"dev.mioscoppergolems.MiosCoppergolems"
 		],
 		"client": [
-			"dev.bettercoppers.client.BetterCoppersClient"
+			"dev.mioscoppergolems.client.MiosCoppergolemsClient"
 		]
 	},
 	"mixins": [
-		"bettercoppers.mixins.json",
+		"mioscoppergolems.mixins.json",
 		{
-			"config": "bettercoppers.client.mixins.json",
+			"config": "mioscoppergolems.client.mixins.json",
 			"environment": "client"
 		}
 	],

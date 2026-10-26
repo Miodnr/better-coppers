@@ -1,4 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": { "layer0": "bettercoppers:item/mineshaft_plan" }
-}

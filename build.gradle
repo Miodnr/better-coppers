@@ -10,7 +10,7 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"bettercoppers" {
+		"mioscoppergolems" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}

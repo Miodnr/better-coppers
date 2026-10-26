@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "mioscoppergolems:block/survey_table_front",
+    "down": "minecraft:block/dark_oak_planks",
+    "up": "mioscoppergolems:block/survey_table_top",
+    "north": "mioscoppergolems:block/survey_table_front",
+    "south": "mioscoppergolems:block/survey_table_front",
+    "east": "mioscoppergolems:block/survey_table_side",
+    "west": "mioscoppergolems:block/survey_table_side"
+  }
+}

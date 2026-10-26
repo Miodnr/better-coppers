@@ -1,4 +1,4 @@
-# Better Coppers
+# Mios Coppergolems
 
 **Copper Golems that do real work.** A Fabric mod for **Minecraft 26.3** that turns the copper golem from a chest shuffler into a small, slightly clumsy worker. It sorts your storage, digs mineshafts, farms and fishes, carries goods across the world, rides minecarts and boats, and gets hunted by monsters. It also needs iron golems to keep it safe, and it patches those iron golems up with your iron.
 
@@ -156,6 +156,12 @@ Sorters and couriers are free. Every other job costs something:
 
 ---
 
+## Add-on: Mios Coppergolems Automatisation
+
+The [`automatisation/`](automatisation/README.md) folder holds an add-on with **conveyor belts, funnels, chutes, presses, saws and grabber arms**, in the spirit of Create but more mechanical. There is no power network: every machine has a crank that a copper golem with a **Copper Wrench** has to turn. See its [README](automatisation/README.md).
+
+---
+
 ## Building and running
 
 Needs **Java 25**, Fabric Loader and Fabric API.
@@ -163,13 +169,14 @@ Needs **Java 25**, Fabric Loader and Fabric API.
 ```powershell
 $env:JAVA_HOME = "C:\Program Files\Eclipse Adoptium\jdk-25.0.2.10-hotspot"
 .\gradlew.bat runClient   # start the game with the mod
-.\gradlew.bat build       # mod jar in build/libs/
+.\gradlew.bat build       # mod jar in build/libs/ (and the add-on's in automatisation/build/libs/)
+.\gradlew.bat :automatisation:runClient   # the game with the mod and the add-on
 ```
 
 ## Project structure
 
 ```
-src/main/java/dev/bettercoppers/
+src/main/java/dev/mioscoppergolems/
   golem/     SortItemsBehavior (sorting AI), ItemFamilies (what counts as related), CartChaining, Inventories
   courier/   CourierBehavior, Couriers (routes, chunk tickets), CourierRoute
   travel/    RideBehavior (minecarts and boats)
@@ -183,8 +190,10 @@ src/main/java/dev/bettercoppers/
   home/      Homes, HomeLinking (linking homes and routes), HomeDisplay (particle lines)
   block/, menu/  Survey Table and its menu
   entity/, item/  Copper Chest Minecart
+  api/       hooks for add-ons: jobs, brain behaviours, link targets
   mixin/     swaps in the new golem AI, goal accessors
-src/client/java/dev/bettercoppers/client/
+src/client/java/dev/mioscoppergolems/client/
   render/    cart renderer with the iron chain, GolemTrimLayer
+automatisation/  the Automatisation add-on (its own Gradle subproject)
 tools/       TrimGen.java (golem trim textures from the vanilla armour trims), SurveyGen.java (Survey Table textures)
 ```

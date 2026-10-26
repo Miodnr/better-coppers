@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": ["minecraft:minecart", "#minecraft:copper_chests"],
+  "result": { "id": "mioscoppergolems:copper_chest_minecart" }
+}
