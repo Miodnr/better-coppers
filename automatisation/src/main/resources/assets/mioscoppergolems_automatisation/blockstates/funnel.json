@@ -1,0 +1,56 @@
+{
+  "variants": {
+    "facing=up,pushing=false": {
+      "model": "mioscoppergolems_automatisation:block/funnel"
+    },
+    "facing=up,pushing=true": {
+      "model": "mioscoppergolems_automatisation:block/funnel_pushing"
+    },
+    "facing=down,pushing=false": {
+      "model": "mioscoppergolems_automatisation:block/funnel",
+      "x": 180
+    },
+    "facing=down,pushing=true": {
+      "model": "mioscoppergolems_automatisation:block/funnel_pushing",
+      "x": 180
+    },
+    "facing=north,pushing=false": {
+      "model": "mioscoppergolems_automatisation:block/funnel",
+      "x": 90
+    },
+    "facing=north,pushing=true": {
+      "model": "mioscoppergolems_automatisation:block/funnel_pushing",
+      "x": 90
+    },
+    "facing=east,pushing=false": {
+      "model": "mioscoppergolems_automatisation:block/funnel",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,pushing=true": {
+      "model": "mioscoppergolems_automatisation:block/funnel_pushing",
+      "x": 90,
+      "y": 90
+    },
+    "facing=south,pushing=false": {
+      "model": "mioscoppergolems_automatisation:block/funnel",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,pushing=true": {
+      "model": "mioscoppergolems_automatisation:block/funnel_pushing",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west,pushing=false": {
+      "model": "mioscoppergolems_automatisation:block/funnel",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,pushing=true": {
+      "model": "mioscoppergolems_automatisation:block/funnel_pushing",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

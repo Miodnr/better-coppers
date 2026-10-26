@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "K": "minecraft:dried_kelp"
+  },
+  "pattern": [
+    "C C",
+    "C C",
+    " K "
+  ],
+  "result": {
+    "id": "mioscoppergolems_automatisation:funnel",
+    "count": 2
+  }
+}

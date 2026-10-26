@@ -9,4 +9,5 @@ pluginManagement {
 	}
 }
 
-rootProject.name = 'bettercoppers'
+rootProject.name = 'mioscoppergolems'
+include 'automatisation'

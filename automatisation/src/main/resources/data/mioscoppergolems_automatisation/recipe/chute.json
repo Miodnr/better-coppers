@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "minecraft:copper_ingot"
+  },
+  "pattern": [
+    "C C",
+    "C C",
+    "C C"
+  ],
+  "result": {
+    "id": "mioscoppergolems_automatisation:chute",
+    "count": 4
+  }
+}

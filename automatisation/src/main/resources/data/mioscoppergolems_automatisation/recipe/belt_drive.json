@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "S": "minecraft:stick",
+    "C": "minecraft:copper_ingot",
+    "G": "minecraft:copper_block"
+  },
+  "pattern": [
+    " S ",
+    "CGC",
+    "CCC"
+  ],
+  "result": {
+    "id": "mioscoppergolems_automatisation:belt_drive",
+    "count": 1
+  }
+}

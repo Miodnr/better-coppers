@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "B": "minecraft:copper_block",
+    "P": "minecraft:piston",
+    "I": "minecraft:iron_block"
+  },
+  "pattern": [
+    "CBC",
+    "C C",
+    "PIP"
+  ],
+  "result": {
+    "id": "mioscoppergolems_automatisation:press",
+    "count": 1
+  }
+}

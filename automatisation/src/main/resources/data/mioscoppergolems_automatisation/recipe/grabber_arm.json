@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "minecraft:crafter",
+    "S": "mioscoppergolems_automatisation:iron_sheet",
+    "C": "minecraft:copper_ingot",
+    "B": "minecraft:copper_block"
+  },
+  "pattern": [
+    " G ",
+    "SCS",
+    "SBS"
+  ],
+  "result": {
+    "id": "mioscoppergolems_automatisation:grabber_arm",
+    "count": 1
+  }
+}

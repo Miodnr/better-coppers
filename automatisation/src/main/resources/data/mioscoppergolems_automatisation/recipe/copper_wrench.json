@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    " C",
+    "CS",
+    "S "
+  ],
+  "result": {
+    "id": "mioscoppergolems_automatisation:copper_wrench",
+    "count": 1
+  }
+}

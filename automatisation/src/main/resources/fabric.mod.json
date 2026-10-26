@@ -1,0 +1,25 @@
+{
+	"schemaVersion": 1,
+	"id": "mioscoppergolems_automatisation",
+	"version": "${version}",
+	"name": "Mios Coppergolems Automatisation",
+	"description": "Conveyor belts, funnels, chutes, presses, saws and grabber arms, all worked by copper golems.",
+	"authors": ["Miodnr"],
+	"license": "All-Rights-Reserved",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"dev.mioscoppergolems.automatisation.Automatisation"
+		],
+		"client": [
+			"dev.mioscoppergolems.automatisation.client.AutomatisationClient"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*",
+		"mioscoppergolems": "*"
+	}
+}

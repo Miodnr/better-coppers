@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "K": "minecraft:dried_kelp",
+    "C": "minecraft:copper_ingot",
+    "R": "minecraft:redstone"
+  },
+  "pattern": [
+    "KKK",
+    "CRC"
+  ],
+  "result": {
+    "id": "mioscoppergolems_automatisation:conveyor_belt",
+    "count": 6
+  }
+}

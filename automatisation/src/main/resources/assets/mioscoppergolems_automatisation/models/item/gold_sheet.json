@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "mioscoppergolems_automatisation:item/gold_sheet"
+  }
+}

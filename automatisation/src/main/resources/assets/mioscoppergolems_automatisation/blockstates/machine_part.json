@@ -1,0 +1,25 @@
+{
+  "variants": {
+    "part=crank": {
+      "model": "mioscoppergolems_automatisation:block/part_crank"
+    },
+    "part=gear": {
+      "model": "mioscoppergolems_automatisation:block/part_gear"
+    },
+    "part=press_head": {
+      "model": "mioscoppergolems_automatisation:block/part_press_head"
+    },
+    "part=saw_blade": {
+      "model": "mioscoppergolems_automatisation:block/part_saw_blade"
+    },
+    "part=arm_turret": {
+      "model": "mioscoppergolems_automatisation:block/part_arm_turret"
+    },
+    "part=arm_segment": {
+      "model": "mioscoppergolems_automatisation:block/part_arm_segment"
+    },
+    "part=arm_claw": {
+      "model": "mioscoppergolems_automatisation:block/part_arm_claw"
+    }
+  }
+}

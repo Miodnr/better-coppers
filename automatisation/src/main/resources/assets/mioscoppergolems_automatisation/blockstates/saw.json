@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,running=false": {
+      "model": "mioscoppergolems_automatisation:block/saw"
+    },
+    "facing=north,running=true": {
+      "model": "mioscoppergolems_automatisation:block/saw"
+    },
+    "facing=east,running=false": {
+      "model": "mioscoppergolems_automatisation:block/saw",
+      "y": 90
+    },
+    "facing=east,running=true": {
+      "model": "mioscoppergolems_automatisation:block/saw",
+      "y": 90
+    },
+    "facing=south,running=false": {
+      "model": "mioscoppergolems_automatisation:block/saw",
+      "y": 180
+    },
+    "facing=south,running=true": {
+      "model": "mioscoppergolems_automatisation:block/saw",
+      "y": 180
+    },
+    "facing=west,running=false": {
+      "model": "mioscoppergolems_automatisation:block/saw",
+      "y": 270
+    },
+    "facing=west,running=true": {
+      "model": "mioscoppergolems_automatisation:block/saw",
+      "y": 270
+    }
+  }
+}

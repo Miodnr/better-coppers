@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "mioscoppergolems_automatisation:copper_sheet",
+    "X": "minecraft:stonecutter"
+  },
+  "pattern": [
+    "CCC",
+    "C C",
+    " X "
+  ],
+  "result": {
+    "id": "mioscoppergolems_automatisation:saw",
+    "count": 1
+  }
+}

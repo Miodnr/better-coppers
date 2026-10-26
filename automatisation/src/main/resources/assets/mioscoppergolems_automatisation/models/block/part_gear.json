@@ -1,0 +1,188 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "minecraft:block/copper_block",
+    "plate": "minecraft:block/cut_copper",
+    "teeth": "minecraft:block/copper_block"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        2,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#plate"
+        },
+        "south": {
+          "texture": "#plate"
+        },
+        "east": {
+          "texture": "#plate"
+        },
+        "west": {
+          "texture": "#plate"
+        },
+        "up": {
+          "texture": "#plate"
+        },
+        "down": {
+          "texture": "#plate"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        0,
+        0
+      ],
+      "to": [
+        9,
+        2,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#teeth"
+        },
+        "south": {
+          "texture": "#teeth"
+        },
+        "east": {
+          "texture": "#teeth"
+        },
+        "west": {
+          "texture": "#teeth"
+        },
+        "up": {
+          "texture": "#teeth"
+        },
+        "down": {
+          "texture": "#teeth"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        7
+      ],
+      "to": [
+        16,
+        2,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#teeth"
+        },
+        "south": {
+          "texture": "#teeth"
+        },
+        "east": {
+          "texture": "#teeth"
+        },
+        "west": {
+          "texture": "#teeth"
+        },
+        "up": {
+          "texture": "#teeth"
+        },
+        "down": {
+          "texture": "#teeth"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        0,
+        0
+      ],
+      "to": [
+        9,
+        2,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#teeth"
+        },
+        "south": {
+          "texture": "#teeth"
+        },
+        "east": {
+          "texture": "#teeth"
+        },
+        "west": {
+          "texture": "#teeth"
+        },
+        "up": {
+          "texture": "#teeth"
+        },
+        "down": {
+          "texture": "#teeth"
+        }
+      },
+      "rotation": {
+        "angle": 45,
+        "axis": "y",
+        "origin": [
+          8,
+          1,
+          8
+        ]
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        7
+      ],
+      "to": [
+        16,
+        2,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#teeth"
+        },
+        "south": {
+          "texture": "#teeth"
+        },
+        "east": {
+          "texture": "#teeth"
+        },
+        "west": {
+          "texture": "#teeth"
+        },
+        "up": {
+          "texture": "#teeth"
+        },
+        "down": {
+          "texture": "#teeth"
+        }
+      },
+      "rotation": {
+        "angle": 45,
+        "axis": "y",
+        "origin": [
+          8,
+          1,
+          8
+        ]
+      }
+    }
+  ]
+}
